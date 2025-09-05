@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Administración de Flota de Vehículos - Gestiona tu flota de manera eficiente">
+    <meta name="keywords" content="flota, vehículos, administración, arrendadoras, gestión, tareas">
+    <meta name="author" content="Sistema Flota">
+
+    <title>Flota • Sistema de Administración</title>
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" as="style">
+
+    <!-- Stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzAwN0FGRiIvPgo8cGF0aCBkPSJNOCAxMkg0VjIwSDhWMTJaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMjggMTJIMjRWMjBIMjhWMTJaIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMjQgOEg4VjI0SDI0VjhaIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+">
+
+    <!-- Web App Manifest CORREGIDO -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Performance and Security CORREGIDO -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <!-- Removido X-Frame-Options del meta tag, debe estar en headers HTTP -->
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#007AFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Flota">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iNDAiIGZpbGw9IiMwMDdBRkYiLz4KPHN2ZyB4PSI0NSIgeT0iNDUiIHdpZHRoPSI5MCIgaGVpZ2h0PSI5MCIgdmlld0JveD0iMCAwIDkwIDkwIj4KPHN2ZyB4PSIwIiB5PSIwIiB3aWR0aD0iOTAiIGhlaWdodD0iOTAiIHZpZXdCb3g9IjAgMCA5MCA5MCI+CjxwYXRoIGQ9Ik0yMCAzNUgxMFY1NUgyMFYzNVoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik04MCAzNUg3MFY1NUg4MFYzNVoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik03MCAyMEgyMFY3MEg3MFYyMFoiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iNCIvPgo8L3N2Zz4KPC9zdmc+Cjwvc3ZnPg==">
+</head>
+<body class="bg-light font-inter">
+<!-- Loading Screen -->
+<div id="loading-screen" class="position-fixed top-0 start-0 w-100 h-100 bg-white" style="z-index: 9999;">
+    <div class="d-flex align-items-center justify-content-center h-100">
+        <div class="text-center">
+            <div class="app-icon mb-4 mx-auto">
+                <i class="fas fa-car"></i>
+            </div>
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-muted">Cargando sistema...</p>
+        </div>
+    </div>
+</div>
+
+<!-- Header Estilo Apple -->
+<header class="header-apple">
+    <div class="container">
+        <div class="row align-items-center py-3">
+            <div class="col-auto">
+                <div class="d-flex align-items-center">
+                    <div class="app-icon me-3">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div>
+                        <h1 class="app-title mb-0">Flota</h1>
+                        <p class="app-subtitle mb-0">Sistema de Administración</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto ms-auto">
+                <div class="header-actions">
+                    <button class="header-btn me-2" title="Notificaciones" aria-label="Notificaciones">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="header-btn me-2" title="Perfil de usuario" aria-label="Perfil de usuario">
+                        <i class="fas fa-user-circle"></i>
+                    </button>
+                    <button class="header-btn" id="theme-toggle" title="Cambiar tema" aria-label="Cambiar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Navigation Estilo Apple -->
+<nav class="nav-apple" role="navigation" aria-label="Navegación principal">
+    <div class="container">
+        <div class="nav-container d-flex justify-content-center">
+            <button onclick="showSection('dashboard')" class="nav-item active me-3" data-section="dashboard" aria-label="Panel de control">
+                <div class="nav-icon">
+                    <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                </div>
+                <span class="nav-label">Panel</span>
+            </button>
+            <button onclick="showSection('arrendadoras')" class="nav-item me-3" data-section="arrendadoras" aria-label="Gestión de empresas">
+                <div class="nav-icon">
+                    <i class="fas fa-building" aria-hidden="true"></i>
+                </div>
+                <span class="nav-label">Empresas</span>
+            </button>
+            <button onclick="showSection('vehiculos')" class="nav-item me-3" data-section="vehiculos" aria-label="Gestión de vehículos">
+                <div class="nav-icon">
+                    <i class="fas fa-car" aria-hidden="true"></i>
+                </div>
+                <span class="nav-label">Vehículos</span>
+            </button>
+            <button onclick="showSection('colaboradores')" class="nav-item me-3" data-section="colaboradores" aria-label="Gestión de colaboradores">
+                <div class="nav-icon">
+                    <i class="fas fa-users" aria-hidden="true"></i>
+                </div>
+                <span class="nav-label">Colaboradores</span>
+            </button>
+            <button onclick="showSection('tareas')" class="nav-item me-3" data-section="tareas" aria-label="Gestión de tareas">
+                <div class="nav-icon">
+                    <i class="fas fa-tasks" aria-hidden="true"></i>
+                </div>
+                <span class="nav-label">Tareas</span>
+            </button>
+            <button onclick="showSection('marcas')" class="nav-item me-3" data-section="marcas" aria-label="Gestión de marcas">
+                <div class="nav-icon">
+                    <i class="fas fa-tag" aria-hidden="true"></i>
+                </div>
+                <span class="nav-label">Marcas</span>
+            </button>
+            <button onclick="showSection('modelos')" class="nav-item me-3" data-section="modelos" aria-label="Gestión de modelos">
+                <div class="nav-icon">
+                    <i class="fas fa-cogs" aria-hidden="true"></i>
+                </div>
+                <span class="nav-label">Modelos</span>
+            </button>
+            <button onclick="showSection('estados')" class="nav-item me-3" data-section="estados" aria-label="Gestión de estados">
+                <div class="nav-icon">
+                    <i class="fas fa-list-check" aria-hidden="true"></i>
+                </div>
+                <span class="nav-label">Estados</span>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main-content" role="main">
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="section active" data-loading="dashboard">
+        <div class="section-header d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="section-title mb-1">Panel de Control</h2>
+                <p class="section-subtitle mb-0">Vista general de tu flota</p>
+            </div>
+            <button onclick="app.refreshCurrentSection()" class="btn-primary-apple" title="Actualizar datos">
+                <i class="fas fa-sync-alt me-2"></i>
+                <span>Actualizar</span>
+            </button>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-blue">
+                    <div class="stat-icon">
+                        <i class="fas fa-building" aria-hidden="true"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="total-arrendadoras" aria-live="polite">0</div>
+                        <div class="stat-label">Empresas</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-green">
+                    <div class="stat-icon">
+                        <i class="fas fa-car" aria-hidden="true"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="total-vehiculos" aria-live="polite">0</div>
+                        <div class="stat-label">Vehículos</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-purple">
+                    <div class="stat-icon">
+                        <i class="fas fa-users" aria-hidden="true"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="total-colaboradores" aria-live="polite">0</div>
+                        <div class="stat-label">Colaboradores</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card stat-card-orange">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks" aria-hidden="true"></i>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" id="total-tareas" aria-live="polite">0</div>
+                        <div class="stat-label">Tareas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="dashboard-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title mb-0">Distribución por Empresa</h3>
+                        <button class="card-action" title="Ver más detalles">
+                            <i class="fas fa-chart-pie" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="card-content">
+                    <div id="vehiculos-chart" class="chart-container">
+                        <i class="fas fa-chart-pie text-4xl mb-2 opacity-50" aria-hidden="true"></i>
+                        <p>Gráfico de distribución</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="dashboard-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title mb-0">Estado de Tareas</h3>
+                        <button class="card-action" title="Ver todas las tareas">
+                            <i class="fas fa-tasks" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="card-content">
+                        <div id="tareas-estado" class="tareas-estado-grid" aria-live="polite">
+                            <div class="tarea-estado-item">
+                                <div class="tarea-estado-number" id="tareas-pendientes">0</div>
+                                <div class="tarea-estado-label">Pendientes</div>
+                            </div>
+                            <div class="tarea-estado-item">
+                                <div class="tarea-estado-number" id="tareas-en-progreso">0</div>
+                                <div class="tarea-estado-label">En Progreso</div>
+                            </div>
+                            <div class="tarea-estado-item">
+                                <div class="tarea-estado-number" id="tareas-completadas">0</div>
+                                <div class="tarea-estado-label">Completadas</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Arrendadoras Section -->
+    <section id="arrendadoras" class="section" data-loading="arrendadoras">
+        <div class="section-header d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="section-title mb-1">Empresas Arrendadoras</h2>
+                <p class="section-subtitle mb-0">Gestiona las empresas de tu red</p>
+            </div>
+            <button onclick="openModal('arrendadora')" class="btn-primary-apple">
+                <i class="fas fa-plus me-2" aria-hidden="true"></i>
+                <span>Nueva Empresa</span>
+            </button>
+        </div>
+
+        <div class="content-card">
+            <div class="card-tools mb-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                            <input type="text"
+                                   id="search-arrendadoras"
+                                   placeholder="Buscar empresas..."
+                                   class="search-input"
+                                   aria-label="Buscar empresas">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-hover" role="table" aria-label="Lista de empresas arrendadoras">
+                        <thead class="table-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Empresa</th>
+                            <th scope="col">Identificación</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody id="arrendadoras-table">
+                        <tr>
+                            <td colspan="4" class="text-center py-4">
+                                <div class="loading-spinner"></div>
+                                <span class="ms-2">Cargando datos...</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vehículos Section -->
+    <section id="vehiculos" class="section" data-loading="vehiculos">
+        <div class="section-header d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="section-title mb-1">Flota de Vehículos</h2>
+                <p class="section-subtitle mb-0">Administra todos los vehículos</p>
+            </div>
+            <button onclick="openModal('vehiculo')" class="btn-primary-apple">
+                <i class="fas fa-plus me-2" aria-hidden="true"></i>
+                <span>Nuevo Vehículo</span>
+            </button>
+        </div>
+
+        <div class="content-card">
+            <div class="card-tools mb-3">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                            <input type="text"
+                                   id="search-vehiculos"
+                                   placeholder="Buscar por placa o VIN..."
+                                   class="search-input"
+                                   aria-label="Buscar vehículos">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filter-arrendadora" class="form-select" aria-label="Filtrar por empresa">
+                            <option value="">Todas las empresas</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select id="filter-estado" class="form-select" aria-label="Filtrar por estado">
+                            <option value="">Todos los estados</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="vehiculos-grid" class="row g-4" role="grid" aria-label="Cuadrícula de vehículos">
+                <div class="col-12 text-center py-5">
+                    <div class="loading-spinner"></div>
+                    <span class="ms-2">Cargando vehículos...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Colaboradores Section -->
+    <section id="colaboradores" class="section" data-loading="colaboradores">
+        <div class="section-header d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="section-title mb-1">Colaboradores</h2>
+                <p class="section-subtitle mb-0">Gestiona el equipo de trabajo</p>
+            </div>
+            <button onclick="openModal('colaborador')" class="btn-primary-apple">
+                <i class="fas fa-plus me-2" aria-hidden="true"></i>
+                <span>Nuevo Colaborador</span>
+            </button>
+        </div>
+
+        <div class="content-card">
+            <div class="card-tools mb-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                            <input type="text"
+                                   id="search-colaboradores"
+                                   placeholder="Buscar colaboradores..."
+                                   class="search-input"
+                                   aria-label="Buscar colaboradores">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-hover" role="table" aria-label="Lista de colaboradores">
+                        <thead class="table-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Identificación</th>
+                            <th scope="col">Puesto</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody id="colaboradores-table">
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                <div class="loading-spinner"></div>
+                                <span class="ms-2">Cargando datos...</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tareas Section -->
+    <section id="tareas" class="section" data-loading="tareas">
+        <div class="section-header d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="section-title mb-1">Gestión de Tareas</h2>
+                <p class="section-subtitle mb-0">Administra las tareas de mantenimiento</p>
+            </div>
+            <button onclick="openModal('tarea')" class="btn-primary-apple">
+                <i class="fas fa-plus me-2" aria-hidden="true"></i>
+                <span>Nueva Tarea</span>
+            </button>
+        </div>
+
+        <div class="content-card">
+            <div class="card-tools mb-3">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                            <input type="text"
+                                   id="search-tareas"
+                                   placeholder="Buscar tareas..."
+                                   class="search-input"
+                                   aria-label="Buscar tareas">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="filter-tarea-estado" class="form-select" aria-label="Filtrar por estado">
+                            <option value="">Todos los estados</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="en_progreso">En Progreso</option>
+                            <option value="completada">Completada</option>
+                            <option value="cancelada">Cancelada</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="filter-tarea-prioridad" class="form-select" aria-label="Filtrar por prioridad">
+                            <option value="">Todas las prioridades</option>
+                            <option value="baja">Baja</option>
+                            <option value="media">Media</option>
+                            <option value="alta">Alta</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="filter-tarea-responsable" class="form-select" aria-label="Filtrar por responsable">
+                            <option value="">Todos los responsables</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="tareas-grid" class="row g-4" role="grid" aria-label="Cuadrícula de tareas">
+                <div class="col-12 text-center py-5">
+                    <div class="loading-spinner"></div>
+                    <span class="ms-2">Cargando tareas...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marcas Section -->
+    <section id="marcas" class="section" data-loading="marcas">
+        <div class="section-header d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="section-title mb-1">Marcas de Vehículos</h2>
+                <p class="section-subtitle mb-0">Catálogo de marcas disponibles</p>
+            </div>
+            <button onclick="openModal('marca')" class="btn-primary-apple">
+                <i class="fas fa-plus me-2" aria-hidden="true"></i>
+                <span>Nueva Marca</span>
+            </button>
+        </div>
+
+        <div class="content-card">
+            <div class="card-tools mb-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                            <input type="text"
+                                   id="search-marcas"
+                                   placeholder="Buscar marcas..."
+                                   class="search-input"
+                                   aria-label="Buscar marcas">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-hover" role="table" aria-label="Lista de marcas">
+                        <thead class="table-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Modelos</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody id="marcas-table">
+                        <tr>
+                            <td colspan="4" class="text-center py-4">
+                                <div class="loading-spinner"></div>
+                                <span class="ms-2">Cargando datos...</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modelos Section -->
+    <section id="modelos" class="section" data-loading="modelos">
+        <div class="section-header d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="section-title mb-1">Modelos de Vehículos</h2>
+                <p class="section-subtitle mb-0">Catálogo de modelos por marca</p>
+            </div>
+            <button onclick="openModal('modelo')" class="btn-primary-apple">
+                <i class="fas fa-plus me-2" aria-hidden="true"></i>
+                <span>Nuevo Modelo</span>
+            </button>
+        </div>
+
+        <div class="content-card">
+            <div class="card-tools mb-3">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                            <input type="text"
+                                   id="search-modelos"
+                                   placeholder="Buscar modelos..."
+                                   class="search-input"
+                                   aria-label="Buscar modelos">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <select id="filter-marca-modelo" class="form-select" aria-label="Filtrar por marca">
+                            <option value="">Todas las marcas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-hover" role="table" aria-label="Lista de modelos">
+                        <thead class="table-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Modelo</th>
+                            <th scope="col">Marca</th>
+                            <th scope="col">Vehículos</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody id="modelos-table">
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                <div class="loading-spinner"></div>
+                                <span class="ms-2">Cargando datos...</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Estados Section -->
+    <section id="estados" class="section" data-loading="estados">
+        <div class="section-header d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="section-title mb-1">Estados de Inventario</h2>
+                <p class="section-subtitle mb-0">Gestiona los estados de los vehículos</p>
+            </div>
+            <button onclick="openModal('estado')" class="btn-primary-apple">
+                <i class="fas fa-plus me-2" aria-hidden="true"></i>
+                <span>Nuevo Estado</span>
+            </button>
+        </div>
+
+        <div class="content-card">
+            <div class="card-tools mb-3">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="search-container">
+                            <i class="fas fa-search search-icon" aria-hidden="true"></i>
+                            <input type="text"
+                                   id="search-estados"
+                                   placeholder="Buscar estados..."
+                                   class="search-input"
+                                   aria-label="Buscar estados">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container">
+                <div class="table-responsive">
+                    <table class="table table-hover" role="table" aria-label="Lista de estados">
+                        <thead class="table-light">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Vehículos</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody id="estados-table">
+                        <tr>
+                            <td colspan="4" class="text-center py-4">
+                                <div class="loading-spinner"></div>
+                                <span class="ms-2">Cargando datos...</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Modal Overlay -->
+<div id="modal-overlay" class="modal-overlay d-none" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-backdrop"></div>
+    <div id="modal-content" class="modal-content">
+        <!-- Modal content will be inserted here -->
+    </div>
+</div>
+
+<!-- Modal para Detalles de Tarea -->
+<div id="tarea-detail-modal" class="modal-overlay d-none" role="dialog" aria-modal="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content modal-wide">
+        <div id="tarea-detail-content">
+            <!-- Tarea detail content will be inserted here -->
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container" class="toast-container" role="region" aria-live="assertive" aria-label="Notificaciones"></div>
+
+<!-- Network Status Indicator -->
+<div id="network-status" class="position-fixed bottom-0 start-0 m-3 px-3 py-2 rounded text-white small fw-medium d-none">
+    <i class="fas fa-wifi me-2"></i>
+    <span id="network-status-text">Sin conexión</span>
+</div>
+
+<!-- Scripts -->
+<script>
+    // Tiempo de inicio de carga para medición de rendimiento CORREGIDO
+    const pageLoadStart = performance.now();
+
+    // Hide loading screen when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        const loadingScreen = document.getElementById('loading-screen');
+        if (loadingScreen) {
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.remove();
+                }, 300);
+            }, 500);
+        }
+    });
+
+    // Network status monitoring
+    function updateNetworkStatus() {
+        const networkStatus = document.getElementById('network-status');
+        const networkStatusText = document.getElementById('network-status-text');
+
+        if (navigator.onLine) {
+            networkStatus.classList.add('d-none');
+        } else {
+            networkStatus.classList.remove('d-none');
+            networkStatus.style.backgroundColor = '#FF3B30';
+            networkStatusText.textContent = 'Sin conexión a internet';
+        }
+    }
+
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+
+    // Theme toggle functionality
+    document.getElementById('theme-toggle')?.addEventListener('click', function() {
+        const html = document.documentElement;
+        const isDark = html.classList.toggle('dark');
+        const icon = this.querySelector('i');
+
+        if (isDark) {
+            icon.className = 'fas fa-sun';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            icon.className = 'fas fa-moon';
+            localStorage.setItem('theme', 'light');
+        }
+    });
+
+    // Load saved theme
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.classList.add('dark');
+        const themeToggle = document.getElementById('theme-toggle');
+        if (themeToggle) {
+            themeToggle.querySelector('i').className = 'fas fa-sun';
+        }
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Ctrl/Cmd + K for quick search
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            const activeSearchInput = document.querySelector('.section.active .search-input');
+            if (activeSearchInput) {
+                activeSearchInput.focus();
+            }
+        }
+
+        // Number keys for quick navigation
+        if (e.altKey && e.key >= '1' && e.key <= '8') {
+            e.preventDefault();
+            const sections = ['dashboard', 'arrendadoras', 'vehiculos', 'colaboradores', 'tareas', 'marcas', 'modelos', 'estados'];
+            const sectionIndex = parseInt(e.key) - 1;
+            if (sections[sectionIndex]) {
+                showSection(sections[sectionIndex]);
+            }
+        }
+    });
+
+    // Service Worker registration for PWA
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('sw.js')
+                .then(function(registration) {
+                    console.log('✅ ServiceWorker registrado exitosamente:', registration.scope);
+                })
+                .catch(function(err) {
+                    console.log('❌ Error al registrar ServiceWorker:', err);
+                });
+        });
+    }
+
+    // Error handling for uncaught errors MEJORADO
+    window.addEventListener('error', function(e) {
+        console.error('🔴 Error global:', e.error);
+
+        // Solo mostrar toast si la app está inicializada
+        if (window.app && typeof window.app.showToast === 'function') {
+            window.app.showToast('Ha ocurrido un error inesperado', 'error');
+        }
+    });
+
+    // Capturar errores de promesas rechazadas
+    window.addEventListener('unhandledrejection', function(e) {
+        console.error('🔴 Promesa rechazada:', e.reason);
+
+        if (window.app && typeof window.app.showToast === 'function') {
+            window.app.showToast('Error de conexión o servidor', 'error');
+        }
+
+        // Prevenir que el error aparezca en la consola como no manejado
+        e.preventDefault();
+    });
+
+    // Performance monitoring CORREGIDO
+    window.addEventListener('load', function() {
+        if ('performance' in window) {
+            // Usar el tiempo de inicio que definimos al principio
+            const loadTime = performance.now() - pageLoadStart;
+            console.log(`✅ Página cargada en ${loadTime.toFixed(2)}ms`);
+
+            // Opcional: enviar métricas a un servicio de monitoreo
+            if (loadTime > 3000) {
+                console.warn(`⚠️ Carga lenta detectada: ${loadTime.toFixed(2)}ms`);
+            }
+        }
+    });
+
+    // Detectar conexión lenta
+    if ('connection' in navigator) {
+        const connection = navigator.connection;
+        if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+            console.warn('⚠️ Conexión lenta detectada');
+        }
+    }
+
+    // Detectar si está ejecutándose como PWA
+    function isPWA() {
+        return window.matchMedia('(display-mode: standalone)').matches ||
+            window.navigator.standalone === true;
+    }
+
+    if (isPWA()) {
+        console.log('📱 Ejecutándose como PWA');
+        // Agregar clase para estilos específicos de PWA
+        document.body.classList.add('pwa-mode');
+    }
+</script>
+
+<!-- Bootstrap JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Supabase Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Application Scripts -->
+<script src="config.js"></script>
+<script src="api.js"></script>
+<script src="app.js"></script>
+<script src="modals.js"></script>
+<script src="vehiculo-tabs.js"></script>
+</body>
+</html>
