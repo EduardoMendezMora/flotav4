@@ -603,7 +603,8 @@ class ApiService {
     }
 
     async getArrendadora(id) {
-        const result = await this.request(`/arrendadoras?id=eq.${id}&select=*`);
+        const response = await this.request(`/arrendadoras?id=eq.${id}&select=*`);
+        const result = response && response.success ? response.data : response;
         return result?.[0] || null;
     }
 
@@ -689,9 +690,12 @@ class ApiService {
 
     async getVehiculo(id) {
         try {
-            const vehiculo = await this.request(`/vehiculos?id=eq.${id}&select=*`);
+            const response = await this.request(`/vehiculos?id=eq.${id}&select=*`);
+            
+            // Extraer datos de la respuesta
+            const vehiculo = response && response.success ? response.data : response;
 
-            if (!vehiculo || vehiculo.length === 0) {
+            if (!vehiculo || !Array.isArray(vehiculo) || vehiculo.length === 0) {
                 return null;
             }
 
@@ -706,9 +710,12 @@ class ApiService {
 
     async getVehiculoCompleto(id) {
         try {
-            const vehiculo = await this.request(`/vehiculos?id=eq.${id}&select=*`);
+            const response = await this.request(`/vehiculos?id=eq.${id}&select=*`);
+            
+            // Extraer datos de la respuesta
+            const vehiculo = response && response.success ? response.data : response;
 
-            if (!vehiculo || vehiculo.length === 0) {
+            if (!vehiculo || !Array.isArray(vehiculo) || vehiculo.length === 0) {
                 return null;
             }
 
@@ -748,12 +755,18 @@ class ApiService {
             console.log('- Estados:', estadoInventarioIds);
 
             // Hacer consultas en paralelo
-            const [marcas, modelos, arrendadoras, estadosInventario] = await Promise.all([
+            const [marcasResp, modelosResp, arrendadorasResp, estadosInventarioResp] = await Promise.all([
                 marcaIds.length > 0 ? this.request(`/marcas?id=in.(${marcaIds.join(',')})&select=id,nombre`) : [],
                 modeloIds.length > 0 ? this.request(`/modelos?id=in.(${modeloIds.join(',')})&select=id,nombre`) : [],
                 arrendadoraIds.length > 0 ? this.request(`/arrendadoras?id=in.(${arrendadoraIds.join(',')})&select=id,nombre`) : [],
                 estadoInventarioIds.length > 0 ? this.request(`/estados_inventario?id=in.(${estadoInventarioIds.join(',')})&select=id,nombre`) : []
             ]);
+
+            // Extraer datos de las respuestas
+            const marcas = marcasResp && marcasResp.success ? marcasResp.data : marcasResp || [];
+            const modelos = modelosResp && modelosResp.success ? modelosResp.data : modelosResp || [];
+            const arrendadoras = arrendadorasResp && arrendadorasResp.success ? arrendadorasResp.data : arrendadorasResp || [];
+            const estadosInventario = estadosInventarioResp && estadosInventarioResp.success ? estadosInventarioResp.data : estadosInventarioResp || [];
 
             // Combinar datos
             return vehiculos.map(vehiculo => ({
@@ -818,7 +831,10 @@ class ApiService {
         try {
             if (!ids || ids.length === 0) return [];
 
-            return await this.request(`/colaboradores?id=in.(${ids.join(',')})&select=id,nombre`);
+            const response = await this.request(`/colaboradores?id=in.(${ids.join(',')})&select=id,nombre`);
+            
+            // Extraer datos de la respuesta
+            return response && response.success ? response.data : response || [];
         } catch (error) {
             console.error('❌ Error obteniendo colaboradores:', error);
             return [];
@@ -885,7 +901,8 @@ class ApiService {
     }
 
     async getMarca(id) {
-        const result = await this.request(`/marcas?id=eq.${id}&select=*`);
+        const response = await this.request(`/marcas?id=eq.${id}&select=*`);
+        const result = response && response.success ? response.data : response;
         return result?.[0] || null;
     }
 
@@ -965,7 +982,8 @@ class ApiService {
     }
 
     async getModelo(id) {
-        const result = await this.request(`/modelos?id=eq.${id}&select=*`);
+        const response = await this.request(`/modelos?id=eq.${id}&select=*`);
+        const result = response && response.success ? response.data : response;
         const modelo = result?.[0];
 
         if (modelo && modelo.marca_id) {
@@ -1057,7 +1075,8 @@ class ApiService {
     }
 
     async getEstadoInventario(id) {
-        const result = await this.request(`/estados_inventario?id=eq.${id}&select=*`);
+        const response = await this.request(`/estados_inventario?id=eq.${id}&select=*`);
+        const result = response && response.success ? response.data : response;
         return result?.[0] || null;
     }
 
