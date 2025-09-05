@@ -1542,10 +1542,13 @@ class FlotaApp {
         this.setLoading('modelos', true);
         try {
             const filters = this.getModelosFilters();
-            const [modelos] = await Promise.all([
+            const [modelosResp] = await Promise.all([
                 api.getModelos(filters),
                 this.loadModelosFilters()
             ]);
+            
+            // Extraer el array de datos de la respuesta
+            const modelos = modelosResp && modelosResp.success ? modelosResp.data : modelosResp || [];
             this.renderModelosTable(modelos);
         } catch (error) {
             console.error('Error loading modelos:', error);
@@ -1630,7 +1633,8 @@ class FlotaApp {
     async loadEstados() {
         this.setLoading('estados', true);
         try {
-            const estados = await api.getEstadosInventario();
+            const estadosResp = await api.getEstadosInventario();
+            const estados = estadosResp && estadosResp.success ? estadosResp.data : estadosResp || [];
             this.renderEstadosTable(estados);
         } catch (error) {
             console.error('Error loading estados:', error);
@@ -1688,7 +1692,8 @@ class FlotaApp {
         const searchTerm = document.getElementById('search-estados')?.value?.toLowerCase() || '';
 
         try {
-            const estados = await api.getEstadosInventario();
+            const estadosResp = await api.getEstadosInventario();
+            const estados = estadosResp && estadosResp.success ? estadosResp.data : estadosResp || [];
             const filtered = estados.filter(e => e.nombre.toLowerCase().includes(searchTerm));
             this.renderEstadosTable(filtered);
         } catch (error) {
