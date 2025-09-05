@@ -148,34 +148,56 @@
                                         <!-- Información Básica del Vehículo -->
                                         <div class="col-lg-6 mb-4">
                                             <div class="card h-100">
-                                                <div class="card-header bg-primary text-white">
+                                                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                                                     <h6 class="mb-0"><i class="fas fa-car me-2"></i>Información del Vehículo</h6>
+                                                    <button class="btn btn-sm btn-outline-light" onclick="toggleEditMode('vehicle-info')" id="edit-vehicle-info-btn">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </button>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Marca</label>
                                                             <div id="vehicle-brand" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-brand" placeholder="Marca del vehículo">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Modelo</label>
                                                             <div id="vehicle-model" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-model" placeholder="Modelo del vehículo">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Año</label>
                                                             <div id="vehicle-year-detail" class="fw-medium">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-year" placeholder="Año" min="1900" max="2030">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Color</label>
                                                             <div id="vehicle-color" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-color" placeholder="Color del vehículo">
                                                         </div>
                                                         <div class="col-12 mb-3">
                                                             <label class="form-label text-muted small">VIN</label>
                                                             <div id="vehicle-vin" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-vin" placeholder="Número VIN" maxlength="17">
                                                         </div>
                                                         <div class="col-12 mb-3">
                                                             <label class="form-label text-muted small">Arrendadora</label>
                                                             <div id="vehicle-arrendadora" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-arrendadora">
+                                                                <option value="">Seleccionar arrendadora</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Botones de acción para edición -->
+                                                    <div class="d-none" id="vehicle-info-actions">
+                                                        <div class="d-flex gap-2 justify-content-end">
+                                                            <button class="btn btn-sm btn-success" onclick="saveVehicleInfo()">
+                                                                <i class="fas fa-save"></i> Guardar
+                                                            </button>
+                                                            <button class="btn btn-sm btn-secondary" onclick="cancelEdit('vehicle-info')">
+                                                                <i class="fas fa-times"></i> Cancelar
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -185,30 +207,49 @@
                                         <!-- Información Financiera -->
                                         <div class="col-lg-6 mb-4">
                                             <div class="card h-100">
-                                                <div class="card-header bg-success text-white">
+                                                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
                                                     <h6 class="mb-0"><i class="fas fa-chart-line me-2"></i>Información Financiera</h6>
+                                                    <button class="btn btn-sm btn-outline-light" onclick="toggleEditMode('financial-info')" id="edit-financial-info-btn">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </button>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Precio Semanal</label>
                                                             <div id="vehicle-price" class="fw-bold text-success fs-5">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-price" placeholder="0.00" step="0.01" min="0">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Gastos Administrativos</label>
                                                             <div id="vehicle-expenses" class="fw-bold text-warning fs-5">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-expenses" placeholder="0.00" step="0.01" min="0">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Valor Comercial</label>
                                                             <div id="vehicle-commercial-value" class="fw-medium">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-commercial-value" placeholder="0.00" step="0.01" min="0">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Valor Residual</label>
                                                             <div id="vehicle-residual-value" class="fw-medium">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-residual-value" placeholder="0.00" step="0.01" min="0">
                                                         </div>
                                                         <div class="col-12 mb-3">
                                                             <label class="form-label text-muted small">Observaciones Financieras</label>
                                                             <div id="vehicle-financial-notes" class="fw-medium">-</div>
+                                                            <textarea class="form-control form-control-sm d-none" id="edit-vehicle-financial-notes" placeholder="Observaciones financieras" rows="2"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Botones de acción para edición -->
+                                                    <div class="d-none" id="financial-info-actions">
+                                                        <div class="d-flex gap-2 justify-content-end">
+                                                            <button class="btn btn-sm btn-success" onclick="saveFinancialInfo()">
+                                                                <i class="fas fa-save"></i> Guardar
+                                                            </button>
+                                                            <button class="btn btn-sm btn-secondary" onclick="cancelEdit('financial-info')">
+                                                                <i class="fas fa-times"></i> Cancelar
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -218,34 +259,54 @@
                                         <!-- Información del Cliente -->
                                         <div class="col-lg-6 mb-4">
                                             <div class="card h-100">
-                                                <div class="card-header bg-info text-white">
+                                                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
                                                     <h6 class="mb-0"><i class="fas fa-user me-2"></i>Información del Cliente</h6>
+                                                    <button class="btn btn-sm btn-outline-light" onclick="toggleEditMode('client-info')" id="edit-client-info-btn">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </button>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Cliente</label>
                                                             <div id="vehicle-client-name" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-client-name" placeholder="Nombre del cliente">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Teléfono</label>
                                                             <div id="vehicle-client-phone" class="fw-medium">-</div>
+                                                            <input type="tel" class="form-control form-control-sm d-none" id="edit-vehicle-client-phone" placeholder="Teléfono del cliente">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Email</label>
                                                             <div id="vehicle-client-email" class="fw-medium">-</div>
+                                                            <input type="email" class="form-control form-control-sm d-none" id="edit-vehicle-client-email" placeholder="Email del cliente">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Dirección</label>
                                                             <div id="vehicle-client-address" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-client-address" placeholder="Dirección del cliente">
                                                         </div>
                                                         <div class="col-12 mb-3">
                                                             <label class="form-label text-muted small">Fecha de Contrato</label>
                                                             <div id="vehicle-contract-date" class="fw-medium">-</div>
+                                                            <input type="date" class="form-control form-control-sm d-none" id="edit-vehicle-contract-date">
                                                         </div>
                                                         <div class="col-12 mb-3">
                                                             <label class="form-label text-muted small">Vencimiento</label>
                                                             <div id="vehicle-contract-expiry" class="fw-medium">-</div>
+                                                            <input type="date" class="form-control form-control-sm d-none" id="edit-vehicle-contract-expiry">
+                                                        </div>
+                                                    </div>
+                                                    <!-- Botones de acción para edición -->
+                                                    <div class="d-none" id="client-info-actions">
+                                                        <div class="d-flex gap-2 justify-content-end">
+                                                            <button class="btn btn-sm btn-success" onclick="saveClientInfo()">
+                                                                <i class="fas fa-save"></i> Guardar
+                                                            </button>
+                                                            <button class="btn btn-sm btn-secondary" onclick="cancelEdit('client-info')">
+                                                                <i class="fas fa-times"></i> Cancelar
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -255,30 +316,56 @@
                                         <!-- Estado y Ubicación -->
                                         <div class="col-lg-6 mb-4">
                                             <div class="card h-100">
-                                                <div class="card-header bg-warning text-dark">
+                                                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
                                                     <h6 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Estado y Ubicación</h6>
+                                                    <button class="btn btn-sm btn-outline-dark" onclick="toggleEditMode('status-info')" id="edit-status-info-btn">
+                                                        <i class="fas fa-edit"></i> Editar
+                                                    </button>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Estado</label>
                                                             <div id="vehicle-status-detail" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-status">
+                                                                <option value="">Seleccionar estado</option>
+                                                                <option value="disponible">Disponible</option>
+                                                                <option value="reservado">Reservado</option>
+                                                                <option value="en_uso">En Uso</option>
+                                                                <option value="mantenimiento">Mantenimiento</option>
+                                                                <option value="fuera_servicio">Fuera de Servicio</option>
+                                                            </select>
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Ubicación Actual</label>
                                                             <div id="vehicle-current-location" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-current-location" placeholder="Ubicación actual">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Última Actualización</label>
                                                             <div id="vehicle-last-update" class="fw-medium">-</div>
+                                                            <input type="datetime-local" class="form-control form-control-sm d-none" id="edit-vehicle-last-update">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Próximo Mantenimiento</label>
                                                             <div id="vehicle-next-maintenance" class="fw-medium">-</div>
+                                                            <input type="date" class="form-control form-control-sm d-none" id="edit-vehicle-next-maintenance">
                                                         </div>
                                                         <div class="col-12 mb-3">
                                                             <label class="form-label text-muted small">Observaciones Generales</label>
                                                             <div id="vehicle-general-notes" class="fw-medium">-</div>
+                                                            <textarea class="form-control form-control-sm d-none" id="edit-vehicle-general-notes" placeholder="Observaciones generales" rows="2"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Botones de acción para edición -->
+                                                    <div class="d-none" id="status-info-actions">
+                                                        <div class="d-flex gap-2 justify-content-end">
+                                                            <button class="btn btn-sm btn-success" onclick="saveStatusInfo()">
+                                                                <i class="fas fa-save"></i> Guardar
+                                                            </button>
+                                                            <button class="btn btn-sm btn-secondary" onclick="cancelEdit('status-info')">
+                                                                <i class="fas fa-times"></i> Cancelar
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -485,6 +572,255 @@
             if (currentVehicle && confirm(`¿Estás seguro de que quieres eliminar el vehículo ${currentVehicle.placa}?`)) {
                 // Implementar eliminación
                 console.log('Eliminando vehículo:', currentVehicleId);
+            }
+        }
+
+        // ========================================
+        // FUNCIONALIDAD DE EDICIÓN
+        // ========================================
+        
+        let editMode = {
+            'vehicle-info': false,
+            'financial-info': false,
+            'client-info': false,
+            'status-info': false
+        };
+
+        // Alternar modo de edición
+        function toggleEditMode(section) {
+            const isEditing = editMode[section];
+            
+            if (isEditing) {
+                // Cancelar edición
+                cancelEdit(section);
+            } else {
+                // Activar edición
+                activateEditMode(section);
+            }
+        }
+
+        // Activar modo de edición
+        function activateEditMode(section) {
+            editMode[section] = true;
+            
+            // Ocultar elementos de visualización y mostrar inputs
+            const inputs = document.querySelectorAll(`#${section}-actions`).length > 0 ? 
+                document.querySelectorAll(`#${section} input, #${section} select, #${section} textarea`) : 
+                document.querySelectorAll(`[id^="edit-vehicle-"]`);
+            
+            inputs.forEach(input => {
+                if (input.id.includes(section.replace('-info', '')) || input.id.includes('edit-vehicle-')) {
+                    input.classList.remove('d-none');
+                    // Cargar valor actual en el input
+                    const displayElement = input.id.replace('edit-', '');
+                    const displayEl = document.getElementById(displayElement);
+                    if (displayEl && input.type !== 'file') {
+                        input.value = displayEl.textContent.trim() === '-' ? '' : displayEl.textContent.trim();
+                    }
+                }
+            });
+
+            // Ocultar elementos de visualización
+            const displayElements = document.querySelectorAll(`#${section} .fw-medium, #${section} .fw-bold`);
+            displayElements.forEach(el => {
+                if (!el.id.includes('edit-')) {
+                    el.classList.add('d-none');
+                }
+            });
+
+            // Mostrar botones de acción
+            const actionsDiv = document.getElementById(`${section}-actions`);
+            if (actionsDiv) {
+                actionsDiv.classList.remove('d-none');
+            }
+
+            // Cambiar botón de editar
+            const editBtn = document.getElementById(`edit-${section}-btn`);
+            if (editBtn) {
+                editBtn.innerHTML = '<i class="fas fa-times"></i> Cancelar';
+                editBtn.classList.remove('btn-outline-light', 'btn-outline-dark');
+                editBtn.classList.add('btn-outline-danger');
+            }
+        }
+
+        // Cancelar edición
+        function cancelEdit(section) {
+            editMode[section] = false;
+            
+            // Mostrar elementos de visualización y ocultar inputs
+            const inputs = document.querySelectorAll(`#${section} input, #${section} select, #${section} textarea`);
+            inputs.forEach(input => {
+                input.classList.add('d-none');
+            });
+
+            // Mostrar elementos de visualización
+            const displayElements = document.querySelectorAll(`#${section} .fw-medium, #${section} .fw-bold`);
+            displayElements.forEach(el => {
+                if (!el.id.includes('edit-')) {
+                    el.classList.remove('d-none');
+                }
+            });
+
+            // Ocultar botones de acción
+            const actionsDiv = document.getElementById(`${section}-actions`);
+            if (actionsDiv) {
+                actionsDiv.classList.add('d-none');
+            }
+
+            // Restaurar botón de editar
+            const editBtn = document.getElementById(`edit-${section}-btn`);
+            if (editBtn) {
+                editBtn.innerHTML = '<i class="fas fa-edit"></i> Editar';
+                editBtn.classList.remove('btn-outline-danger');
+                if (section === 'status-info') {
+                    editBtn.classList.add('btn-outline-dark');
+                } else {
+                    editBtn.classList.add('btn-outline-light');
+                }
+            }
+        }
+
+        // Guardar información del vehículo
+        async function saveVehicleInfo() {
+            const data = {
+                marca: document.getElementById('edit-vehicle-brand').value,
+                modelo: document.getElementById('edit-vehicle-model').value,
+                anio: document.getElementById('edit-vehicle-year').value,
+                color: document.getElementById('edit-vehicle-color').value,
+                vin: document.getElementById('edit-vehicle-vin').value,
+                arrendadora_id: document.getElementById('edit-vehicle-arrendadora').value
+            };
+
+            try {
+                const response = await api.updateVehiculo(currentVehicleId, data);
+                if (response.success) {
+                    // Actualizar la visualización
+                    document.getElementById('vehicle-brand').textContent = data.marca || 'Sin marca';
+                    document.getElementById('vehicle-model').textContent = data.modelo || 'Sin modelo';
+                    document.getElementById('vehicle-year-detail').textContent = data.anio || 'N/A';
+                    document.getElementById('vehicle-color').textContent = data.color || 'Sin especificar';
+                    document.getElementById('vehicle-vin').textContent = data.vin || 'Sin VIN';
+                    
+                    cancelEdit('vehicle-info');
+                    showSuccess('Información del vehículo actualizada correctamente');
+                } else {
+                    showError('Error al actualizar: ' + response.error);
+                }
+            } catch (error) {
+                showError('Error al guardar los cambios');
+                console.error('Error:', error);
+            }
+        }
+
+        // Guardar información financiera
+        async function saveFinancialInfo() {
+            const data = {
+                precio_semanal: document.getElementById('edit-vehicle-price').value,
+                gastos_adms: document.getElementById('edit-vehicle-expenses').value,
+                valor_comercial: document.getElementById('edit-vehicle-commercial-value').value,
+                valor_residual: document.getElementById('edit-vehicle-residual-value').value,
+                observaciones_financieras: document.getElementById('edit-vehicle-financial-notes').value
+            };
+
+            try {
+                const response = await api.updateVehiculo(currentVehicleId, data);
+                if (response.success) {
+                    // Actualizar la visualización
+                    document.getElementById('vehicle-price').textContent = data.precio_semanal ? api.formatCurrency(data.precio_semanal) : 'N/A';
+                    document.getElementById('vehicle-expenses').textContent = data.gastos_adms ? api.formatCurrency(data.gastos_adms) : 'N/A';
+                    document.getElementById('vehicle-commercial-value').textContent = data.valor_comercial ? api.formatCurrency(data.valor_comercial) : 'N/A';
+                    document.getElementById('vehicle-residual-value').textContent = data.valor_residual ? api.formatCurrency(data.valor_residual) : 'N/A';
+                    document.getElementById('vehicle-financial-notes').textContent = data.observaciones_financieras || 'Sin observaciones';
+                    
+                    cancelEdit('financial-info');
+                    showSuccess('Información financiera actualizada correctamente');
+                } else {
+                    showError('Error al actualizar: ' + response.error);
+                }
+            } catch (error) {
+                showError('Error al guardar los cambios');
+                console.error('Error:', error);
+            }
+        }
+
+        // Guardar información del cliente
+        async function saveClientInfo() {
+            const data = {
+                cliente_nombre: document.getElementById('edit-vehicle-client-name').value,
+                cliente_telefono: document.getElementById('edit-vehicle-client-phone').value,
+                cliente_email: document.getElementById('edit-vehicle-client-email').value,
+                cliente_direccion: document.getElementById('edit-vehicle-client-address').value,
+                fecha_contrato: document.getElementById('edit-vehicle-contract-date').value,
+                fecha_vencimiento: document.getElementById('edit-vehicle-contract-expiry').value
+            };
+
+            try {
+                const response = await api.updateVehiculo(currentVehicleId, data);
+                if (response.success) {
+                    // Actualizar la visualización
+                    document.getElementById('vehicle-client-name').textContent = data.cliente_nombre || 'Sin asignar';
+                    document.getElementById('vehicle-client-phone').textContent = data.cliente_telefono || 'Sin teléfono';
+                    document.getElementById('vehicle-client-email').textContent = data.cliente_email || 'Sin email';
+                    document.getElementById('vehicle-client-address').textContent = data.cliente_direccion || 'Sin dirección';
+                    document.getElementById('vehicle-contract-date').textContent = data.fecha_contrato ? new Date(data.fecha_contrato).toLocaleDateString() : 'N/A';
+                    document.getElementById('vehicle-contract-expiry').textContent = data.fecha_vencimiento ? new Date(data.fecha_vencimiento).toLocaleDateString() : 'N/A';
+                    
+                    cancelEdit('client-info');
+                    showSuccess('Información del cliente actualizada correctamente');
+                } else {
+                    showError('Error al actualizar: ' + response.error);
+                }
+            } catch (error) {
+                showError('Error al guardar los cambios');
+                console.error('Error:', error);
+            }
+        }
+
+        // Guardar información de estado
+        async function saveStatusInfo() {
+            const data = {
+                estado: document.getElementById('edit-vehicle-status').value,
+                ubicacion_actual: document.getElementById('edit-vehicle-current-location').value,
+                ultima_actualizacion: document.getElementById('edit-vehicle-last-update').value,
+                proximo_mantenimiento: document.getElementById('edit-vehicle-next-maintenance').value,
+                observaciones: document.getElementById('edit-vehicle-general-notes').value
+            };
+
+            try {
+                const response = await api.updateVehiculo(currentVehicleId, data);
+                if (response.success) {
+                    // Actualizar la visualización
+                    document.getElementById('vehicle-status-detail').textContent = data.estado || 'Sin estado';
+                    document.getElementById('vehicle-current-location').textContent = data.ubicacion_actual || 'Sin ubicación';
+                    document.getElementById('vehicle-last-update').textContent = data.ultima_actualizacion ? new Date(data.ultima_actualizacion).toLocaleString() : 'N/A';
+                    document.getElementById('vehicle-next-maintenance').textContent = data.proximo_mantenimiento ? new Date(data.proximo_mantenimiento).toLocaleDateString() : 'N/A';
+                    document.getElementById('vehicle-general-notes').textContent = data.observaciones || 'Sin observaciones';
+                    
+                    cancelEdit('status-info');
+                    showSuccess('Información de estado actualizada correctamente');
+                } else {
+                    showError('Error al actualizar: ' + response.error);
+                }
+            } catch (error) {
+                showError('Error al guardar los cambios');
+                console.error('Error:', error);
+            }
+        }
+
+        // Funciones de utilidad para mostrar mensajes
+        function showSuccess(message) {
+            if (window.app && window.app.showToast) {
+                window.app.showToast(message, 'success');
+            } else {
+                alert('✅ ' + message);
+            }
+        }
+
+        function showError(message) {
+            if (window.app && window.app.showToast) {
+                window.app.showToast(message, 'error');
+            } else {
+                alert('❌ ' + message);
             }
         }
 

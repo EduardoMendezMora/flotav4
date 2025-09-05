@@ -2,6 +2,15 @@
 
 Un sistema completo de administración de flota de vehículos desarrollado con HTML, JavaScript y Supabase.
 
+## ✨ **NUEVA FUNCIONALIDAD: Edición Inline**
+
+Ahora puedes **editar los datos del vehículo directamente** desde la página de detalle sin necesidad de modales adicionales. Cada sección tiene su propio botón de edición:
+
+- **🚗 Información del Vehículo** - Marca, modelo, año, color, VIN, arrendadora
+- **💰 Información Financiera** - Precios, gastos, valores comerciales y residuales
+- **👤 Información del Cliente** - Datos del arrendatario, contacto, fechas de contrato
+- **📍 Estado y Ubicación** - Estado actual, ubicación, mantenimientos
+
 ## 📋 Características
 
 ### ✅ **Dashboard**
