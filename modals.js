@@ -722,7 +722,8 @@ class ModalManager {
             modeloSelect.disabled = false;
             if (modeloButton) modeloButton.disabled = false;
 
-            const modelos = await api.getModelos({ marca_id: marcaId });
+            const modelosResp = await api.getModelos({ marca_id: marcaId });
+            const modelos = modelosResp && modelosResp.success ? modelosResp.data : modelosResp || [];
             modeloSelect.innerHTML = '<option value="">Seleccionar modelo</option>' +
                 modelos.map(m => `<option value="${m.id}">${this.escapeHtml(m.nombre)}</option>`).join('');
         } catch (error) {
@@ -1131,7 +1132,8 @@ class ModalManager {
 
     async loadModeloData(item = null) {
         try {
-            const marcas = await api.getMarcas();
+            const marcasResp = await api.getMarcas();
+            const marcas = marcasResp && marcasResp.success ? marcasResp.data : marcasResp || [];
             const marcaSelect = document.getElementById('modelo-marca');
             marcaSelect.innerHTML = '<option value="">Seleccionar marca</option>' +
                 marcas.map(m => `<option value="${m.id}">${this.escapeHtml(m.nombre)}</option>`).join('');
@@ -1434,7 +1436,8 @@ class ModalManager {
             app.showToast('Marca creada correctamente', 'success');
 
             // Recargar las marcas en el select
-            const marcas = await api.getMarcas();
+            const marcasResp = await api.getMarcas();
+            const marcas = marcasResp && marcasResp.success ? marcasResp.data : marcasResp || [];
             const marcaSelect = document.getElementById('vehiculo-marca');
             marcaSelect.innerHTML = '<option value="">Seleccionar marca</option>' +
                 marcas.map(m => `<option value="${m.id}">${this.escapeHtml(m.nombre)}</option>`).join('');
