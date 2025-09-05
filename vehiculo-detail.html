@@ -149,7 +149,7 @@
                                         <div class="col-lg-6 mb-4">
                                             <div class="card h-100">
                                                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                                                    <h6 class="mb-0"><i class="fas fa-car me-2"></i>Información del Vehículo</h6>
+                                                    <h6 class="mb-0"><i class="fas fa-car me-2"></i>Información Básica</h6>
                                                     <button class="btn btn-sm btn-outline-light" onclick="toggleEditMode('vehicle-info')" id="edit-vehicle-info-btn">
                                                         <i class="fas fa-edit"></i> Editar
                                                     </button>
@@ -157,14 +157,28 @@
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Placa</label>
+                                                            <div id="vehicle-placa" class="fw-bold text-primary fs-5">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-placa" placeholder="Placa del vehículo">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">VIN</label>
+                                                            <div id="vehicle-vin" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-vin" placeholder="Número VIN" maxlength="17">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Marca</label>
                                                             <div id="vehicle-brand" class="fw-medium">-</div>
-                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-brand" placeholder="Marca del vehículo">
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-marca">
+                                                                <option value="">Seleccionar marca</option>
+                                                            </select>
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Modelo</label>
                                                             <div id="vehicle-model" class="fw-medium">-</div>
-                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-model" placeholder="Modelo del vehículo">
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-modelo">
+                                                                <option value="">Seleccionar modelo</option>
+                                                            </select>
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Año</label>
@@ -174,12 +188,47 @@
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Color</label>
                                                             <div id="vehicle-color" class="fw-medium">-</div>
-                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-color" placeholder="Color del vehículo">
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-color">
+                                                                <option value="">Seleccionar color</option>
+                                                            </select>
                                                         </div>
-                                                        <div class="col-12 mb-3">
-                                                            <label class="form-label text-muted small">VIN</label>
-                                                            <div id="vehicle-vin" class="fw-medium">-</div>
-                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-vin" placeholder="Número VIN" maxlength="17">
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Carrocería</label>
+                                                            <div id="vehicle-carroceria" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-carroceria">
+                                                                <option value="">Seleccionar carrocería</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Combustible</label>
+                                                            <div id="vehicle-combustible" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-combustible">
+                                                                <option value="">Seleccionar combustible</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Transmisión</label>
+                                                            <div id="vehicle-transmision" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-transmision">
+                                                                <option value="">Seleccionar transmisión</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Tracción</label>
+                                                            <div id="vehicle-traccion" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-traccion">
+                                                                <option value="">Seleccionar tracción</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Cilindrada (cc)</label>
+                                                            <div id="vehicle-cilindrada" class="fw-medium">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-cilindrada" placeholder="Cilindrada en cc" min="0">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Cilindros</label>
+                                                            <div id="vehicle-cilindros" class="fw-medium">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-cilindros" placeholder="Número de cilindros" min="1" max="16">
                                                         </div>
                                                         <div class="col-12 mb-3">
                                                             <label class="form-label text-muted small">Arrendadora</label>
@@ -217,28 +266,33 @@
                                                     <div class="row">
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Precio Semanal</label>
-                                                            <div id="vehicle-price" class="fw-bold text-success fs-5">-</div>
-                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-price" placeholder="0.00" step="0.01" min="0">
+                                                            <div id="vehicle-precio-semanal" class="fw-bold text-success fs-5">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-precio" placeholder="0.00" step="0.01" min="0">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Renta Semanal</label>
+                                                            <div id="vehicle-renta-semanal" class="fw-bold text-info fs-5">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-renta" placeholder="0.00" step="0.01" min="0">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Plazo (semanas)</label>
+                                                            <div id="vehicle-plazo-semanas" class="fw-medium">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-plazo" placeholder="0" min="1">
                                                         </div>
                                                         <div class="col-6 mb-3">
                                                             <label class="form-label text-muted small">Gastos Administrativos</label>
-                                                            <div id="vehicle-expenses" class="fw-bold text-warning fs-5">-</div>
-                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-expenses" placeholder="0.00" step="0.01" min="0">
+                                                            <div id="vehicle-gastos-adms" class="fw-bold text-warning fs-5">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-gastos" placeholder="0.00" step="0.01" min="0">
                                                         </div>
                                                         <div class="col-6 mb-3">
-                                                            <label class="form-label text-muted small">Valor Comercial</label>
-                                                            <div id="vehicle-commercial-value" class="fw-medium">-</div>
-                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-commercial-value" placeholder="0.00" step="0.01" min="0">
+                                                            <label class="form-label text-muted small">Valor Adquisición</label>
+                                                            <div id="vehicle-valor-adquisicion" class="fw-medium">-</div>
+                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-valor" placeholder="0.00" step="0.01" min="0">
                                                         </div>
                                                         <div class="col-6 mb-3">
-                                                            <label class="form-label text-muted small">Valor Residual</label>
-                                                            <div id="vehicle-residual-value" class="fw-medium">-</div>
-                                                            <input type="number" class="form-control form-control-sm d-none" id="edit-vehicle-residual-value" placeholder="0.00" step="0.01" min="0">
-                                                        </div>
-                                                        <div class="col-12 mb-3">
-                                                            <label class="form-label text-muted small">Observaciones Financieras</label>
-                                                            <div id="vehicle-financial-notes" class="fw-medium">-</div>
-                                                            <textarea class="form-control form-control-sm d-none" id="edit-vehicle-financial-notes" placeholder="Observaciones financieras" rows="2"></textarea>
+                                                            <label class="form-label text-muted small">Fecha Adquisición</label>
+                                                            <div id="vehicle-fecha-adquisicion" class="fw-medium">-</div>
+                                                            <input type="date" class="form-control form-control-sm d-none" id="edit-vehicle-fecha-adq">
                                                         </div>
                                                     </div>
                                                     <!-- Botones de acción para edición -->
@@ -256,46 +310,47 @@
                                             </div>
                                         </div>
 
-                                        <!-- Información del Cliente -->
+                                        <!-- Información del Cliente y Contactos -->
                                         <div class="col-lg-6 mb-4">
                                             <div class="card h-100">
                                                 <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                                                    <h6 class="mb-0"><i class="fas fa-user me-2"></i>Información del Cliente</h6>
+                                                    <h6 class="mb-0"><i class="fas fa-user me-2"></i>Cliente y Contactos</h6>
                                                     <button class="btn btn-sm btn-outline-light" onclick="toggleEditMode('client-info')" id="edit-client-info-btn">
                                                         <i class="fas fa-edit"></i> Editar
                                                     </button>
                                                 </div>
                                                 <div class="card-body">
                                                     <div class="row">
-                                                        <div class="col-6 mb-3">
-                                                            <label class="form-label text-muted small">Cliente</label>
-                                                            <div id="vehicle-client-name" class="fw-medium">-</div>
-                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-client-name" placeholder="Nombre del cliente">
-                                                        </div>
-                                                        <div class="col-6 mb-3">
-                                                            <label class="form-label text-muted small">Teléfono</label>
-                                                            <div id="vehicle-client-phone" class="fw-medium">-</div>
-                                                            <input type="tel" class="form-control form-control-sm d-none" id="edit-vehicle-client-phone" placeholder="Teléfono del cliente">
-                                                        </div>
-                                                        <div class="col-6 mb-3">
-                                                            <label class="form-label text-muted small">Email</label>
-                                                            <div id="vehicle-client-email" class="fw-medium">-</div>
-                                                            <input type="email" class="form-control form-control-sm d-none" id="edit-vehicle-client-email" placeholder="Email del cliente">
-                                                        </div>
-                                                        <div class="col-6 mb-3">
-                                                            <label class="form-label text-muted small">Dirección</label>
-                                                            <div id="vehicle-client-address" class="fw-medium">-</div>
-                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-client-address" placeholder="Dirección del cliente">
-                                                        </div>
                                                         <div class="col-12 mb-3">
-                                                            <label class="form-label text-muted small">Fecha de Contrato</label>
-                                                            <div id="vehicle-contract-date" class="fw-medium">-</div>
-                                                            <input type="date" class="form-control form-control-sm d-none" id="edit-vehicle-contract-date">
+                                                            <label class="form-label text-muted small">Cliente Actual</label>
+                                                            <div id="vehicle-cliente-actual" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-cliente" placeholder="Nombre del cliente actual">
                                                         </div>
-                                                        <div class="col-12 mb-3">
-                                                            <label class="form-label text-muted small">Vencimiento</label>
-                                                            <div id="vehicle-contract-expiry" class="fw-medium">-</div>
-                                                            <input type="date" class="form-control form-control-sm d-none" id="edit-vehicle-contract-expiry">
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Apoderado</label>
+                                                            <div id="vehicle-apoderado" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-apoderado">
+                                                                <option value="">Seleccionar apoderado</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Vendedor</label>
+                                                            <div id="vehicle-vendedor" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-vendedor">
+                                                                <option value="">Seleccionar vendedor</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Grupo WhatsApp</label>
+                                                            <div id="vehicle-whatsapp-grupo" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-whatsapp">
+                                                                <option value="">Seleccionar grupo</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Grupo WhatsApp (Texto)</label>
+                                                            <div id="vehicle-grupo-whatsapp" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-grupo-whatsapp" placeholder="Grupo de WhatsApp">
                                                         </div>
                                                     </div>
                                                     <!-- Botones de acción para edición -->
@@ -325,36 +380,33 @@
                                                 <div class="card-body">
                                                     <div class="row">
                                                         <div class="col-6 mb-3">
-                                                            <label class="form-label text-muted small">Estado</label>
-                                                            <div id="vehicle-status-detail" class="fw-medium">-</div>
-                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-status">
-                                                                <option value="">Seleccionar estado</option>
-                                                                <option value="disponible">Disponible</option>
-                                                                <option value="reservado">Reservado</option>
-                                                                <option value="en_uso">En Uso</option>
-                                                                <option value="mantenimiento">Mantenimiento</option>
-                                                                <option value="fuera_servicio">Fuera de Servicio</option>
+                                                            <label class="form-label text-muted small">Estatus</label>
+                                                            <div id="vehicle-estatus" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-estatus" placeholder="Estatus del vehículo">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Ubicación</label>
+                                                            <div id="vehicle-ubicacion" class="fw-medium">-</div>
+                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-ubicacion" placeholder="Ubicación actual">
+                                                        </div>
+                                                        <div class="col-6 mb-3">
+                                                            <label class="form-label text-muted small">Estado Actual</label>
+                                                            <div id="vehicle-estado-actual" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-estado-actual">
+                                                                <option value="">Seleccionar estado actual</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-6 mb-3">
-                                                            <label class="form-label text-muted small">Ubicación Actual</label>
-                                                            <div id="vehicle-current-location" class="fw-medium">-</div>
-                                                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-current-location" placeholder="Ubicación actual">
-                                                        </div>
-                                                        <div class="col-6 mb-3">
-                                                            <label class="form-label text-muted small">Última Actualización</label>
-                                                            <div id="vehicle-last-update" class="fw-medium">-</div>
-                                                            <input type="datetime-local" class="form-control form-control-sm d-none" id="edit-vehicle-last-update">
-                                                        </div>
-                                                        <div class="col-6 mb-3">
-                                                            <label class="form-label text-muted small">Próximo Mantenimiento</label>
-                                                            <div id="vehicle-next-maintenance" class="fw-medium">-</div>
-                                                            <input type="date" class="form-control form-control-sm d-none" id="edit-vehicle-next-maintenance">
+                                                            <label class="form-label text-muted small">Estado Inventario</label>
+                                                            <div id="vehicle-estado-inventario" class="fw-medium">-</div>
+                                                            <select class="form-control form-control-sm d-none" id="edit-vehicle-estado-inventario">
+                                                                <option value="">Seleccionar estado inventario</option>
+                                                            </select>
                                                         </div>
                                                         <div class="col-12 mb-3">
-                                                            <label class="form-label text-muted small">Observaciones Generales</label>
-                                                            <div id="vehicle-general-notes" class="fw-medium">-</div>
-                                                            <textarea class="form-control form-control-sm d-none" id="edit-vehicle-general-notes" placeholder="Observaciones generales" rows="2"></textarea>
+                                                            <label class="form-label text-muted small">Link de Fotos</label>
+                                                            <div id="vehicle-link-fotos" class="fw-medium">-</div>
+                                                            <input type="url" class="form-control form-control-sm d-none" id="edit-vehicle-fotos" placeholder="URL de fotos del vehículo">
                                                         </div>
                                                     </div>
                                                     <!-- Botones de acción para edición -->
@@ -520,24 +572,41 @@
             document.getElementById('vehicle-status').textContent = vehicle.estados_inventario?.nombre || 'Sin estado';
 
             // Información básica del vehículo
+            document.getElementById('vehicle-placa').textContent = vehicle.placa || 'Sin placa';
+            document.getElementById('vehicle-vin').textContent = vehicle.vin || 'Sin VIN';
             document.getElementById('vehicle-brand').textContent = vehicle.marcas?.nombre || 'Sin marca';
             document.getElementById('vehicle-model').textContent = vehicle.modelos?.nombre || 'Sin modelo';
             document.getElementById('vehicle-year-detail').textContent = vehicle.anio || 'N/A';
-            document.getElementById('vehicle-color').textContent = vehicle.color || 'Sin especificar';
-            document.getElementById('vehicle-vin').textContent = vehicle.vin || 'Sin VIN';
+            document.getElementById('vehicle-color').textContent = vehicle.colores?.nombre || 'Sin especificar';
+            document.getElementById('vehicle-carroceria').textContent = vehicle.carrocerias?.nombre || 'Sin especificar';
+            document.getElementById('vehicle-combustible').textContent = vehicle.combustibles?.nombre || 'Sin especificar';
+            document.getElementById('vehicle-transmision').textContent = vehicle.transmisiones?.nombre || 'Sin especificar';
+            document.getElementById('vehicle-traccion').textContent = vehicle.tracciones?.nombre || 'Sin especificar';
+            document.getElementById('vehicle-cilindrada').textContent = vehicle.cilindrada_cc ? `${vehicle.cilindrada_cc} cc` : 'Sin especificar';
+            document.getElementById('vehicle-cilindros').textContent = vehicle.cilindros || 'Sin especificar';
             document.getElementById('vehicle-arrendadora').textContent = vehicle.arrendadoras?.nombre || 'Sin asignar';
 
             // Información financiera
-            document.getElementById('vehicle-price').textContent = vehicle.precio_semanal ? api.formatCurrency(vehicle.precio_semanal) : 'N/A';
-            document.getElementById('vehicle-expenses').textContent = vehicle.gastos_adms ? api.formatCurrency(vehicle.gastos_adms) : 'N/A';
-            document.getElementById('vehicle-commercial-value').textContent = vehicle.valor_comercial ? api.formatCurrency(vehicle.valor_comercial) : 'N/A';
-            document.getElementById('vehicle-residual-value').textContent = vehicle.valor_residual ? api.formatCurrency(vehicle.valor_residual) : 'N/A';
-            document.getElementById('vehicle-financial-notes').textContent = vehicle.observaciones_financieras || 'Sin observaciones';
+            document.getElementById('vehicle-precio-semanal').textContent = vehicle.precio_semanal ? api.formatCurrency(vehicle.precio_semanal) : 'N/A';
+            document.getElementById('vehicle-renta-semanal').textContent = vehicle.renta_semanal ? api.formatCurrency(vehicle.renta_semanal) : 'N/A';
+            document.getElementById('vehicle-plazo-semanas').textContent = vehicle.plazo_semanas || 'N/A';
+            document.getElementById('vehicle-gastos-adms').textContent = vehicle.gastos_adms ? api.formatCurrency(vehicle.gastos_adms) : 'N/A';
+            document.getElementById('vehicle-valor-adquisicion').textContent = vehicle.valor_adquisicion ? api.formatCurrency(vehicle.valor_adquisicion) : 'N/A';
+            document.getElementById('vehicle-fecha-adquisicion').textContent = vehicle.fecha_adquisicion || 'N/A';
 
-            // Información del cliente
-            document.getElementById('vehicle-client-name').textContent = vehicle.cliente_nombre || 'Sin asignar';
-            document.getElementById('vehicle-client-phone').textContent = vehicle.cliente_telefono || 'Sin teléfono';
-            document.getElementById('vehicle-client-email').textContent = vehicle.cliente_email || 'Sin email';
+            // Información del cliente y contactos
+            document.getElementById('vehicle-cliente-actual').textContent = vehicle.cliente_actual || 'Sin asignar';
+            document.getElementById('vehicle-apoderado').textContent = vehicle.apoderados?.nombre || 'Sin asignar';
+            document.getElementById('vehicle-vendedor').textContent = vehicle.vendedores?.nombre || 'Sin asignar';
+            document.getElementById('vehicle-whatsapp-grupo').textContent = vehicle.whatsapp_grupos?.nombre || 'Sin asignar';
+            document.getElementById('vehicle-grupo-whatsapp').textContent = vehicle.grupo_whatsapp || 'Sin asignar';
+
+            // Estado y ubicación
+            document.getElementById('vehicle-estatus').textContent = vehicle.estatus || 'Sin especificar';
+            document.getElementById('vehicle-ubicacion').textContent = vehicle.ubicacion || 'Sin especificar';
+            document.getElementById('vehicle-estado-actual').textContent = vehicle.estados_actuales?.nombre || 'Sin especificar';
+            document.getElementById('vehicle-estado-inventario').textContent = vehicle.estados_inventario?.nombre || 'Sin especificar';
+            document.getElementById('vehicle-link-fotos').textContent = vehicle.link_fotos || 'Sin enlace';
             document.getElementById('vehicle-client-address').textContent = vehicle.cliente_direccion || 'Sin dirección';
             document.getElementById('vehicle-contract-date').textContent = vehicle.fecha_contrato ? new Date(vehicle.fecha_contrato).toLocaleDateString() : 'N/A';
             document.getElementById('vehicle-contract-expiry').textContent = vehicle.fecha_vencimiento ? new Date(vehicle.fecha_vencimiento).toLocaleDateString() : 'N/A';
@@ -1127,6 +1196,18 @@
                         whatsappSelect.innerHTML = '<option value="">Seleccionar grupo WhatsApp</option>';
                         whatsappGruposResponse.data.forEach(grupo => {
                             whatsappSelect.innerHTML += `<option value="${grupo.id}">${grupo.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar apoderados
+                const apoderadosResponse = await api.getApoderados();
+                if (apoderadosResponse.success && apoderadosResponse.data) {
+                    const apoderadoSelect = document.getElementById('edit-vehicle-apoderado');
+                    if (apoderadoSelect) {
+                        apoderadoSelect.innerHTML = '<option value="">Seleccionar apoderado</option>';
+                        apoderadosResponse.data.forEach(apoderado => {
+                            apoderadoSelect.innerHTML += `<option value="${apoderado.id}">${apoderado.nombre}</option>`;
                         });
                     }
                 }

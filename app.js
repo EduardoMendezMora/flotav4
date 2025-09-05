@@ -1939,6 +1939,7 @@ class FlotaApp {
         });
     }
 
+
     // ===== UTILIDADES =====
     escapeHtml(text) {
         if (!text) return '';
