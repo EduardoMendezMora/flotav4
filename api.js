@@ -316,9 +316,12 @@ class ApiService {
             }
 
             console.log('🔍 Ejecutando consulta de tareas:', query);
-            const tareas = await this.request(query);
+            const response = await this.request(query);
+            
+            // Extraer datos de la respuesta
+            const tareas = response && response.success ? response.data : response;
 
-            if (!tareas || tareas.length === 0) {
+            if (!tareas || !Array.isArray(tareas) || tareas.length === 0) {
                 console.log('📝 No hay tareas en la base de datos');
                 return [];
             }
@@ -665,9 +668,12 @@ class ApiService {
             }
 
             console.log('🔍 Ejecutando consulta de vehículos:', query);
-            const vehiculos = await this.request(query);
+            const response = await this.request(query);
+            
+            // Extraer datos de la respuesta
+            const vehiculos = response && response.success ? response.data : response;
 
-            if (!vehiculos || vehiculos.length === 0) {
+            if (!vehiculos || !Array.isArray(vehiculos) || vehiculos.length === 0) {
                 console.log('🚗 No hay vehículos que coincidan con los filtros');
                 return [];
             }
@@ -791,9 +797,12 @@ class ApiService {
     // NUEVA FUNCIÓN: Obtener vehículos con relaciones para tareas
     async getVehiculosConRelaciones(vehiculoIds) {
         try {
-            const vehiculos = await this.request(`/vehiculos?id=in.(${vehiculoIds.join(',')})&select=*`);
+            const response = await this.request(`/vehiculos?id=in.(${vehiculoIds.join(',')})&select=*`);
+            
+            // Extraer datos de la respuesta
+            const vehiculos = response && response.success ? response.data : response;
 
-            if (!vehiculos || vehiculos.length === 0) {
+            if (!vehiculos || !Array.isArray(vehiculos) || vehiculos.length === 0) {
                 return [];
             }
 
@@ -1091,7 +1100,7 @@ class ApiService {
     // ===== ESTADÍSTICAS MEJORADAS =====
     async getEstadisticas() {
         try {
-            const [arrendadoras, vehiculos, marcas, modelos, estados, colaboradores, tareas] = await Promise.all([
+            const [arrendadorasResp, vehiculosResp, marcasResp, modelosResp, estadosResp, colaboradoresResp, tareasResp] = await Promise.all([
                 this.getArrendadoras(),
                 this.getVehiculos({ limit: 1000 }),
                 this.getMarcas(),
@@ -1100,6 +1109,15 @@ class ApiService {
                 this.getColaboradores(),
                 this.getTareas({ limit: 1000 })
             ]);
+
+            // Extraer datos de las respuestas
+            const arrendadoras = arrendadorasResp && arrendadorasResp.success ? arrendadorasResp.data : arrendadorasResp || [];
+            const vehiculos = vehiculosResp && vehiculosResp.success ? vehiculosResp.data : vehiculosResp || [];
+            const marcas = marcasResp && marcasResp.success ? marcasResp.data : marcasResp || [];
+            const modelos = modelosResp && modelosResp.success ? modelosResp.data : modelosResp || [];
+            const estados = estadosResp && estadosResp.success ? estadosResp.data : estadosResp || [];
+            const colaboradores = colaboradoresResp && colaboradoresResp.success ? colaboradoresResp.data : colaboradoresResp || [];
+            const tareas = tareasResp && tareasResp.success ? tareasResp.data : tareasResp || [];
 
             // Calcular estadísticas adicionales
             const vehiculosPorEstado = this.groupByProperty(vehiculos, 'estado_inventario_id');
