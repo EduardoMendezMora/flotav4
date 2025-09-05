@@ -31,8 +31,13 @@ class ApiService {
         });
     }
 
-    // Método genérico CORREGIDO para hacer peticiones
+    // Método genérico MEJORADO para hacer peticiones con validación robusta
     async request(endpoint, options = {}) {
+        // Validación de entrada
+        if (!endpoint || typeof endpoint !== 'string') {
+            throw new Error('Endpoint inválido');
+        }
+
         if (!this.isOnline && !this.isCached(endpoint)) {
             throw new Error('Sin conexión a internet');
         }
@@ -46,7 +51,11 @@ class ApiService {
         }
 
         const config = {
-            headers: this.headers,
+            headers: {
+                ...this.headers,
+                'Content-Type': 'application/json',
+                ...options.headers
+            },
             ...options
         };
 
@@ -57,19 +66,49 @@ class ApiService {
                 const errorText = await response.text();
                 console.error(`🔴 HTTP ${response.status} Error en ${endpoint}:`, errorText);
 
+                // Manejo específico de errores HTTP
+                let errorMessage = `Error ${response.status}`;
+                switch (response.status) {
+                    case 400:
+                        errorMessage = 'Datos inválidos enviados';
+                        break;
+                    case 401:
+                        errorMessage = 'No autorizado - verifica tus credenciales';
+                        break;
+                    case 403:
+                        errorMessage = 'Acceso denegado';
+                        break;
+                    case 404:
+                        errorMessage = 'Recurso no encontrado';
+                        break;
+                    case 409:
+                        errorMessage = 'Conflicto - el recurso ya existe';
+                        break;
+                    case 422:
+                        errorMessage = 'Datos de validación incorrectos';
+                        break;
+                    case 500:
+                        errorMessage = 'Error interno del servidor';
+                        break;
+                    case 503:
+                        errorMessage = 'Servicio no disponible';
+                        break;
+                }
+
                 console.error('📋 Detalles del error:', {
                     url: url,
                     status: response.status,
                     statusText: response.statusText,
-                    method: config.method || 'GET'
+                    method: config.method || 'GET',
+                    error: errorText
                 });
 
-                throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+                throw new Error(`${errorMessage}: ${errorText}`);
             }
 
             // Para operaciones DELETE, retornar éxito sin parsear JSON
             if (options.method === 'DELETE') {
-                return { success: true };
+                return { success: true, message: 'Eliminado correctamente' };
             }
 
             const contentType = response.headers.get('content-type');
@@ -79,6 +118,13 @@ class ApiService {
                 data = await response.json();
             } else {
                 data = { success: true };
+            }
+
+            // Validar respuesta
+            if (Array.isArray(data)) {
+                data = { success: true, data: data };
+            } else if (data && typeof data === 'object' && !data.success) {
+                data.success = true;
             }
 
             // Cachear GET requests exitosos
@@ -91,6 +137,55 @@ class ApiService {
             console.error('💥 API Error:', error);
             throw this.handleError(error);
         }
+    }
+
+    // Manejo robusto de errores
+    handleError(error) {
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            return new Error('Error de conexión. Verifica tu internet.');
+        }
+        
+        if (error.name === 'AbortError') {
+            return new Error('Operación cancelada por timeout.');
+        }
+        
+        if (error.message.includes('Failed to fetch')) {
+            return new Error('No se pudo conectar al servidor.');
+        }
+        
+        return error;
+    }
+
+    // Funciones de validación
+    validatePlaca(placa) {
+        if (!placa || typeof placa !== 'string') return false;
+        
+        // Patrones de placa más flexibles
+        const patterns = [
+            /^[A-Z]{3}-\d{3}$/,      // ABC-123
+            /^[A-Z]{3}\d{3}$/,       // ABC123
+            /^[A-Z]{2,3}\d{3,4}$/,   // AB123, ABC123, AB1234, ABC1234
+            /^[A-Z]{2}-\d{4}$/,      // AB-1234
+            /^\d{6}$/,               // 123456
+            /^[A-Z]{1,3}\d{1,4}$/    // A123, AB123, ABC1234
+        ];
+        
+        return patterns.some(pattern => pattern.test(placa.toUpperCase()));
+    }
+
+    validateVIN(vin) {
+        if (!vin || typeof vin !== 'string') return false;
+        return /^[A-HJ-NPR-Z0-9]{17}$/.test(vin.toUpperCase());
+    }
+
+    validateEmail(email) {
+        if (!email || typeof email !== 'string') return false;
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    validatePhone(phone) {
+        if (!phone || typeof phone !== 'string') return false;
+        return /^[\d\-\(\)\s\+]+$/.test(phone);
     }
 
     async fetchWithRetry(url, config, retries = PERFORMANCE_CONFIG.maxRetries) {
@@ -722,6 +817,24 @@ class ApiService {
     }
 
     async createVehiculo(data) {
+        // Validación de datos requeridos
+        const requiredFields = ['placa', 'marca_id', 'modelo_id'];
+        const missingFields = requiredFields.filter(field => !data[field]);
+        
+        if (missingFields.length > 0) {
+            throw new Error(`Campos requeridos faltantes: ${missingFields.join(', ')}`);
+        }
+
+        // Validación de formato de placa
+        if (data.placa && !this.validatePlaca(data.placa)) {
+            throw new Error('Formato de placa inválido');
+        }
+
+        // Validación de VIN si se proporciona
+        if (data.vin && !this.validateVIN(data.vin)) {
+            throw new Error('Formato de VIN inválido');
+        }
+
         const result = await this.request('/vehiculos', {
             method: 'POST',
             headers: {

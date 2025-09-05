@@ -470,6 +470,7 @@
     
     <!-- Application Scripts -->
     <script src="config.js"></script>
+    <script src="validation.js"></script>
     <script src="api.js"></script>
     <script src="app.js"></script>
     <script src="modals.js"></script>
@@ -683,15 +684,47 @@
         // Guardar información del vehículo
         async function saveVehicleInfo() {
             const data = {
-                marca: document.getElementById('edit-vehicle-brand').value,
-                modelo: document.getElementById('edit-vehicle-model').value,
+                marca: document.getElementById('edit-vehicle-brand').value.trim(),
+                modelo: document.getElementById('edit-vehicle-model').value.trim(),
                 anio: document.getElementById('edit-vehicle-year').value,
-                color: document.getElementById('edit-vehicle-color').value,
-                vin: document.getElementById('edit-vehicle-vin').value,
+                color: document.getElementById('edit-vehicle-color').value.trim(),
+                vin: document.getElementById('edit-vehicle-vin').value.trim(),
                 arrendadora_id: document.getElementById('edit-vehicle-arrendadora').value
             };
 
+            // Validación de campos requeridos
+            if (!data.marca) {
+                showError('La marca es requerida');
+                document.getElementById('edit-vehicle-brand').focus();
+                return;
+            }
+
+            if (!data.modelo) {
+                showError('El modelo es requerido');
+                document.getElementById('edit-vehicle-model').focus();
+                return;
+            }
+
+            if (!data.anio || data.anio < 1900 || data.anio > new Date().getFullYear() + 2) {
+                showError('El año debe estar entre 1900 y ' + (new Date().getFullYear() + 2));
+                document.getElementById('edit-vehicle-year').focus();
+                return;
+            }
+
+            // Validación de VIN si se proporciona
+            if (data.vin && !api.validateVIN(data.vin)) {
+                showError('Formato de VIN inválido. Debe tener 17 caracteres alfanuméricos.');
+                document.getElementById('edit-vehicle-vin').focus();
+                return;
+            }
+
             try {
+                // Mostrar indicador de carga
+                const saveBtn = document.querySelector('#vehicle-info-actions .btn-success');
+                const originalText = saveBtn.innerHTML;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                saveBtn.disabled = true;
+
                 const response = await api.updateVehiculo(currentVehicleId, data);
                 if (response.success) {
                     // Actualizar la visualización
@@ -707,8 +740,15 @@
                     showError('Error al actualizar: ' + response.error);
                 }
             } catch (error) {
-                showError('Error al guardar los cambios');
+                showError('Error al guardar los cambios: ' + error.message);
                 console.error('Error:', error);
+            } finally {
+                // Restaurar botón
+                const saveBtn = document.querySelector('#vehicle-info-actions .btn-success');
+                if (saveBtn) {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.disabled = false;
+                }
             }
         }
 

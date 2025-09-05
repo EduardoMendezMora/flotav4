@@ -189,36 +189,83 @@ class FlotaApp {
     }
 
     async loadSectionData(sectionName) {
-        switch (sectionName) {
-            case 'dashboard':
-                await this.loadDashboard();
-                break;
-            case 'arrendadoras':
-                await this.loadArrendadoras();
-                break;
-            case 'vehiculos':
-                await this.loadVehiculos();
-                break;
-            case 'colaboradores':
-                await this.loadColaboradores();
-                break;
-            case 'tareas':
-                await this.loadTareas();
-                break;
-            case 'marcas':
-                await this.loadMarcas();
-                break;
-            case 'modelos':
-                await this.loadModelos();
-                break;
-            case 'estados':
-                await this.loadEstados();
-                break;
+        try {
+            switch (sectionName) {
+                case 'dashboard':
+                    await this.loadDashboard();
+                    break;
+                case 'arrendadoras':
+                    await this.loadArrendadoras();
+                    break;
+                case 'vehiculos':
+                    await this.loadVehiculos();
+                    break;
+                case 'colaboradores':
+                    await this.loadColaboradores();
+                    break;
+                case 'tareas':
+                    await this.loadTareas();
+                    break;
+                case 'marcas':
+                    await this.loadMarcas();
+                    break;
+                case 'modelos':
+                    await this.loadModelos();
+                    break;
+                case 'estados':
+                    await this.loadEstados();
+                    break;
+                default:
+                    console.warn(`Sección desconocida: ${sectionName}`);
+                    throw new Error(`Sección '${sectionName}' no encontrada`);
+            }
+        } catch (error) {
+            console.error(`Error cargando sección ${sectionName}:`, error);
+            
+            // Mostrar mensaje de error más específico
+            let errorMessage = `Error cargando ${sectionName}`;
+            if (error.message.includes('conexión') || error.message.includes('fetch')) {
+                errorMessage = 'Error de conexión. Verifica tu internet.';
+            } else if (error.message.includes('autorizado')) {
+                errorMessage = 'Error de autorización. Recarga la página.';
+            } else if (error.message.includes('servidor')) {
+                errorMessage = 'Error del servidor. Intenta más tarde.';
+            }
+            
+            this.showToast(errorMessage, 'error');
+            
+            // Mostrar estado de error en la sección
+            this.showSectionError(sectionName, errorMessage);
         }
     }
 
     async refreshCurrentSection() {
         await this.loadSectionData(this.currentSection);
+    }
+
+    // Mostrar estado de error en una sección
+    showSectionError(sectionName, errorMessage) {
+        const section = document.getElementById(sectionName);
+        if (section) {
+            const errorHTML = `
+                <div class="error-state text-center py-5">
+                    <div class="error-icon mb-3">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning"></i>
+                    </div>
+                    <h4 class="text-muted mb-2">Error al cargar ${sectionName}</h4>
+                    <p class="text-muted mb-3">${errorMessage}</p>
+                    <button class="btn btn-primary" onclick="app.loadSectionData('${sectionName}')">
+                        <i class="fas fa-redo me-2"></i>Reintentar
+                    </button>
+                </div>
+            `;
+            
+            // Buscar el contenedor de contenido y reemplazarlo
+            const contentContainer = section.querySelector('.content-card, .table-container, .row');
+            if (contentContainer) {
+                contentContainer.innerHTML = errorHTML;
+            }
+        }
     }
 
     // ===== DASHBOARD =====
