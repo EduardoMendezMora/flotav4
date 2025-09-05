@@ -616,7 +616,103 @@
                     const displayElement = input.id.replace('edit-', '');
                     const displayEl = document.getElementById(displayElement);
                     if (displayEl && input.type !== 'file') {
-                        input.value = displayEl.textContent.trim() === '-' ? '' : displayEl.textContent.trim();
+                        let value = displayEl.textContent.trim();
+                        if (value === '-' || value === 'N/A' || value === 'Sin especificar') {
+                            value = '';
+                        }
+                        input.value = value;
+                    }
+                    
+                    // Cargar valores específicos del vehículo actual
+                    if (currentVehicle) {
+                        switch (input.id) {
+                            case 'edit-vehicle-placa':
+                                input.value = currentVehicle.placa || '';
+                                break;
+                            case 'edit-vehicle-brand':
+                            case 'edit-vehicle-marca':
+                                input.value = currentVehicle.marca_id || '';
+                                break;
+                            case 'edit-vehicle-model':
+                            case 'edit-vehicle-modelo':
+                                input.value = currentVehicle.modelo_id || '';
+                                break;
+                            case 'edit-vehicle-year':
+                                input.value = currentVehicle.anio || '';
+                                break;
+                            case 'edit-vehicle-color':
+                                input.value = currentVehicle.color_id || '';
+                                break;
+                            case 'edit-vehicle-vin':
+                                input.value = currentVehicle.vin || '';
+                                break;
+                            case 'edit-vehicle-arrendadora':
+                                input.value = currentVehicle.arrendadora_id || '';
+                                break;
+                            case 'edit-vehicle-carroceria':
+                                input.value = currentVehicle.carroceria_id || '';
+                                break;
+                            case 'edit-vehicle-cilindrada':
+                                input.value = currentVehicle.cilindrada_cc || '';
+                                break;
+                            case 'edit-vehicle-cilindros':
+                                input.value = currentVehicle.cilindros || '';
+                                break;
+                            case 'edit-vehicle-combustible':
+                                input.value = currentVehicle.combustible_id || '';
+                                break;
+                            case 'edit-vehicle-transmision':
+                                input.value = currentVehicle.transmision_id || '';
+                                break;
+                            case 'edit-vehicle-traccion':
+                                input.value = currentVehicle.traccion_id || '';
+                                break;
+                            case 'edit-vehicle-precio':
+                                input.value = currentVehicle.precio_semanal || '';
+                                break;
+                            case 'edit-vehicle-plazo':
+                                input.value = currentVehicle.plazo_semanas || '';
+                                break;
+                            case 'edit-vehicle-gastos':
+                                input.value = currentVehicle.gastos_adms || '';
+                                break;
+                            case 'edit-vehicle-valor':
+                                input.value = currentVehicle.valor_adquisicion || '';
+                                break;
+                            case 'edit-vehicle-fecha-adq':
+                                input.value = currentVehicle.fecha_adquisicion || '';
+                                break;
+                            case 'edit-vehicle-estatus':
+                                input.value = currentVehicle.estatus || '';
+                                break;
+                            case 'edit-vehicle-ubicacion':
+                                input.value = currentVehicle.ubicacion || '';
+                                break;
+                            case 'edit-vehicle-estado-actual':
+                                input.value = currentVehicle.estado_actual_id || '';
+                                break;
+                            case 'edit-vehicle-estado-inventario':
+                                input.value = currentVehicle.estado_inventario_id || '';
+                                break;
+                            case 'edit-vehicle-apoderado':
+                                input.value = currentVehicle.apoderado_id || '';
+                                break;
+                            case 'edit-vehicle-vendedor':
+                                input.value = currentVehicle.vendedor_id || '';
+                                break;
+                            case 'edit-vehicle-whatsapp':
+                                input.value = currentVehicle.whatsapp_grupo_id || '';
+                                break;
+                            case 'edit-vehicle-cliente':
+                                input.value = currentVehicle.cliente_actual || '';
+                                break;
+                            case 'edit-vehicle-grupo-whatsapp':
+                                input.value = currentVehicle.grupo_whatsapp || '';
+                                break;
+                            case 'edit-vehicle-fotos':
+                                input.value = currentVehicle.link_fotos || '';
+                                break;
+                        }
                     }
                 }
             });
@@ -684,24 +780,64 @@
         // Guardar información del vehículo
         async function saveVehicleInfo() {
             const data = {
-                marca: document.getElementById('edit-vehicle-brand').value.trim(),
-                modelo: document.getElementById('edit-vehicle-model').value.trim(),
+                // Campos básicos del vehículo
+                placa: document.getElementById('edit-vehicle-placa')?.value.trim() || currentVehicle?.placa,
+                marca_id: document.getElementById('edit-vehicle-marca')?.value || currentVehicle?.marca_id,
+                modelo_id: document.getElementById('edit-vehicle-modelo')?.value || currentVehicle?.modelo_id,
                 anio: document.getElementById('edit-vehicle-year').value,
-                color: document.getElementById('edit-vehicle-color').value.trim(),
                 vin: document.getElementById('edit-vehicle-vin').value.trim(),
-                arrendadora_id: document.getElementById('edit-vehicle-arrendadora').value
+                arrendadora_id: document.getElementById('edit-vehicle-arrendadora').value,
+                
+                // Campos de características técnicas
+                carroceria_id: document.getElementById('edit-vehicle-carroceria')?.value || currentVehicle?.carroceria_id,
+                cilindrada_cc: document.getElementById('edit-vehicle-cilindrada')?.value || currentVehicle?.cilindrada_cc,
+                cilindros: document.getElementById('edit-vehicle-cilindros')?.value || currentVehicle?.cilindros,
+                combustible_id: document.getElementById('edit-vehicle-combustible')?.value || currentVehicle?.combustible_id,
+                transmision_id: document.getElementById('edit-vehicle-transmision')?.value || currentVehicle?.transmision_id,
+                traccion_id: document.getElementById('edit-vehicle-traccion')?.value || currentVehicle?.traccion_id,
+                color_id: document.getElementById('edit-vehicle-color')?.value || currentVehicle?.color_id,
+                
+                // Campos financieros
+                precio_semanal: document.getElementById('edit-vehicle-precio')?.value || currentVehicle?.precio_semanal,
+                plazo_semanas: document.getElementById('edit-vehicle-plazo')?.value || currentVehicle?.plazo_semanas,
+                gastos_adms: document.getElementById('edit-vehicle-gastos')?.value || currentVehicle?.gastos_adms,
+                valor_adquisicion: document.getElementById('edit-vehicle-valor')?.value || currentVehicle?.valor_adquisicion,
+                fecha_adquisicion: document.getElementById('edit-vehicle-fecha-adq')?.value || currentVehicle?.fecha_adquisicion,
+                
+                // Campos de estado
+                estatus: document.getElementById('edit-vehicle-estatus')?.value || currentVehicle?.estatus,
+                ubicacion: document.getElementById('edit-vehicle-ubicacion')?.value || currentVehicle?.ubicacion,
+                estado_actual_id: document.getElementById('edit-vehicle-estado-actual')?.value || currentVehicle?.estado_actual_id,
+                estado_inventario_id: document.getElementById('edit-vehicle-estado-inventario')?.value || currentVehicle?.estado_inventario_id,
+                
+                // Campos adicionales
+                apoderado_id: document.getElementById('edit-vehicle-apoderado')?.value || currentVehicle?.apoderado_id,
+                vendedor_id: document.getElementById('edit-vehicle-vendedor')?.value || currentVehicle?.vendedor_id,
+                whatsapp_grupo_id: document.getElementById('edit-vehicle-whatsapp')?.value || currentVehicle?.whatsapp_grupo_id,
+                cliente_actual: document.getElementById('edit-vehicle-cliente')?.value || currentVehicle?.cliente_actual,
+                grupo_whatsapp: document.getElementById('edit-vehicle-grupo-whatsapp')?.value || currentVehicle?.grupo_whatsapp,
+                link_fotos: document.getElementById('edit-vehicle-fotos')?.value || currentVehicle?.link_fotos
             };
 
             // Validación de campos requeridos
-            if (!data.marca) {
-                showError('La marca es requerida');
-                document.getElementById('edit-vehicle-brand').focus();
+            if (!data.placa) {
+                showError('La placa es requerida');
+                const placaField = document.getElementById('edit-vehicle-placa');
+                if (placaField) placaField.focus();
                 return;
             }
 
-            if (!data.modelo) {
+            if (!data.marca_id) {
+                showError('La marca es requerida');
+                const marcaField = document.getElementById('edit-vehicle-marca') || document.getElementById('edit-vehicle-brand');
+                if (marcaField) marcaField.focus();
+                return;
+            }
+
+            if (!data.modelo_id) {
                 showError('El modelo es requerido');
-                document.getElementById('edit-vehicle-model').focus();
+                const modeloField = document.getElementById('edit-vehicle-modelo') || document.getElementById('edit-vehicle-model');
+                if (modeloField) modeloField.focus();
                 return;
             }
 
@@ -727,12 +863,8 @@
 
                 const response = await api.updateVehiculo(currentVehicleId, data);
                 if (response.success) {
-                    // Actualizar la visualización
-                    document.getElementById('vehicle-brand').textContent = data.marca || 'Sin marca';
-                    document.getElementById('vehicle-model').textContent = data.modelo || 'Sin modelo';
-                    document.getElementById('vehicle-year-detail').textContent = data.anio || 'N/A';
-                    document.getElementById('vehicle-color').textContent = data.color || 'Sin especificar';
-                    document.getElementById('vehicle-vin').textContent = data.vin || 'Sin VIN';
+                    // Recargar los datos del vehículo para obtener la información actualizada
+                    await loadVehicleData();
                     
                     cancelEdit('vehicle-info');
                     showSuccess('Información del vehículo actualizada correctamente');
@@ -864,9 +996,150 @@
             }
         }
 
+        // Cargar opciones para selects
+        async function loadSelectOptions() {
+            try {
+                // Cargar marcas
+                const marcasResponse = await api.getMarcas();
+                if (marcasResponse.success && marcasResponse.data) {
+                    const marcaSelect = document.getElementById('edit-vehicle-marca') || document.getElementById('edit-vehicle-brand');
+                    if (marcaSelect) {
+                        marcaSelect.innerHTML = '<option value="">Seleccionar marca</option>';
+                        marcasResponse.data.forEach(marca => {
+                            marcaSelect.innerHTML += `<option value="${marca.id}">${marca.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar arrendadoras
+                const arrendadorasResponse = await api.getArrendadoras();
+                if (arrendadorasResponse.success && arrendadorasResponse.data) {
+                    const arrendadoraSelect = document.getElementById('edit-vehicle-arrendadora');
+                    if (arrendadoraSelect) {
+                        arrendadoraSelect.innerHTML = '<option value="">Seleccionar arrendadora</option>';
+                        arrendadorasResponse.data.forEach(arrendadora => {
+                            arrendadoraSelect.innerHTML += `<option value="${arrendadora.id}">${arrendadora.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar carrocerías
+                const carroceriasResponse = await api.getCarrocerias();
+                if (carroceriasResponse.success && carroceriasResponse.data) {
+                    const carroceriaSelect = document.getElementById('edit-vehicle-carroceria');
+                    if (carroceriaSelect) {
+                        carroceriaSelect.innerHTML = '<option value="">Seleccionar carrocería</option>';
+                        carroceriasResponse.data.forEach(carroceria => {
+                            carroceriaSelect.innerHTML += `<option value="${carroceria.id}">${carroceria.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar colores
+                const coloresResponse = await api.getColores();
+                if (coloresResponse.success && coloresResponse.data) {
+                    const colorSelect = document.getElementById('edit-vehicle-color');
+                    if (colorSelect) {
+                        colorSelect.innerHTML = '<option value="">Seleccionar color</option>';
+                        coloresResponse.data.forEach(color => {
+                            colorSelect.innerHTML += `<option value="${color.id}">${color.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar combustibles
+                const combustiblesResponse = await api.getCombustibles();
+                if (combustiblesResponse.success && combustiblesResponse.data) {
+                    const combustibleSelect = document.getElementById('edit-vehicle-combustible');
+                    if (combustibleSelect) {
+                        combustibleSelect.innerHTML = '<option value="">Seleccionar combustible</option>';
+                        combustiblesResponse.data.forEach(combustible => {
+                            combustibleSelect.innerHTML += `<option value="${combustible.id}">${combustible.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar transmisiones
+                const transmisionesResponse = await api.getTransmisiones();
+                if (transmisionesResponse.success && transmisionesResponse.data) {
+                    const transmisionSelect = document.getElementById('edit-vehicle-transmision');
+                    if (transmisionSelect) {
+                        transmisionSelect.innerHTML = '<option value="">Seleccionar transmisión</option>';
+                        transmisionesResponse.data.forEach(transmision => {
+                            transmisionSelect.innerHTML += `<option value="${transmision.id}">${transmision.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar tracciones
+                const traccionesResponse = await api.getTracciones();
+                if (traccionesResponse.success && traccionesResponse.data) {
+                    const traccionSelect = document.getElementById('edit-vehicle-traccion');
+                    if (traccionSelect) {
+                        traccionSelect.innerHTML = '<option value="">Seleccionar tracción</option>';
+                        traccionesResponse.data.forEach(traccion => {
+                            traccionSelect.innerHTML += `<option value="${traccion.id}">${traccion.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar estados actuales
+                const estadosActualesResponse = await api.getEstadosActuales();
+                if (estadosActualesResponse.success && estadosActualesResponse.data) {
+                    const estadoActualSelect = document.getElementById('edit-vehicle-estado-actual');
+                    if (estadoActualSelect) {
+                        estadoActualSelect.innerHTML = '<option value="">Seleccionar estado actual</option>';
+                        estadosActualesResponse.data.forEach(estado => {
+                            estadoActualSelect.innerHTML += `<option value="${estado.id}">${estado.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar estados de inventario
+                const estadosInventarioResponse = await api.getEstadosInventario();
+                if (estadosInventarioResponse.success && estadosInventarioResponse.data) {
+                    const estadoInventarioSelect = document.getElementById('edit-vehicle-estado-inventario');
+                    if (estadoInventarioSelect) {
+                        estadoInventarioSelect.innerHTML = '<option value="">Seleccionar estado de inventario</option>';
+                        estadosInventarioResponse.data.forEach(estado => {
+                            estadoInventarioSelect.innerHTML += `<option value="${estado.id}">${estado.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar vendedores
+                const vendedoresResponse = await api.getVendedores();
+                if (vendedoresResponse.success && vendedoresResponse.data) {
+                    const vendedorSelect = document.getElementById('edit-vehicle-vendedor');
+                    if (vendedorSelect) {
+                        vendedorSelect.innerHTML = '<option value="">Seleccionar vendedor</option>';
+                        vendedoresResponse.data.forEach(vendedor => {
+                            vendedorSelect.innerHTML += `<option value="${vendedor.id}">${vendedor.nombre}</option>`;
+                        });
+                    }
+                }
+
+                // Cargar grupos de WhatsApp
+                const whatsappGruposResponse = await api.getWhatsappGrupos();
+                if (whatsappGruposResponse.success && whatsappGruposResponse.data) {
+                    const whatsappSelect = document.getElementById('edit-vehicle-whatsapp');
+                    if (whatsappSelect) {
+                        whatsappSelect.innerHTML = '<option value="">Seleccionar grupo WhatsApp</option>';
+                        whatsappGruposResponse.data.forEach(grupo => {
+                            whatsappSelect.innerHTML += `<option value="${grupo.id}">${grupo.nombre}</option>`;
+                        });
+                    }
+                }
+
+            } catch (error) {
+                console.error('Error cargando opciones de selects:', error);
+            }
+        }
+
         // Cargar datos cuando se carga la página
         window.addEventListener('load', function() {
             loadVehicleData();
+            loadSelectOptions();
         });
     </script>
 </body>

@@ -1011,6 +1011,42 @@ class ApiService {
         return this.request('/estados_inventario?select=*&order=nombre.asc');
     }
 
+    async getCarrocerias() {
+        return this.request('/carrocerias?select=*&order=nombre.asc');
+    }
+
+    async getColores() {
+        return this.request('/colores?select=*&order=nombre.asc');
+    }
+
+    async getCombustibles() {
+        return this.request('/combustibles?select=*&order=nombre.asc');
+    }
+
+    async getTransmisiones() {
+        return this.request('/transmisiones?select=*&order=nombre.asc');
+    }
+
+    async getTracciones() {
+        return this.request('/tracciones?select=*&order=nombre.asc');
+    }
+
+    async getEstadosActuales() {
+        return this.request('/estados_actuales?select=*&order=nombre.asc');
+    }
+
+    async getVendedores() {
+        return this.request('/vendedores?select=*&order=nombre.asc');
+    }
+
+    async getWhatsappGrupos() {
+        return this.request('/whatsapp_grupos?select=*&order=nombre.asc');
+    }
+
+    async getApoderados() {
+        return this.request('/apoderados?select=*&order=nombre.asc');
+    }
+
     async getEstadoInventario(id) {
         const result = await this.request(`/estados_inventario?id=eq.${id}&select=*`);
         return result?.[0] || null;
@@ -1152,8 +1188,8 @@ class ApiService {
         if (sanitized.plazo_semanas) {
             sanitized.plazo_semanas = parseInt(sanitized.plazo_semanas);
         }
-        if (sanitized.cilindrada) {
-            sanitized.cilindrada = parseInt(sanitized.cilindrada);
+        if (sanitized.cilindrada_cc) {
+            sanitized.cilindrada_cc = parseInt(sanitized.cilindrada_cc);
         }
         if (sanitized.cilindros) {
             sanitized.cilindros = parseInt(sanitized.cilindros);
