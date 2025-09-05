@@ -417,10 +417,14 @@ class FlotaApp {
 
     async loadVehiculosFilters() {
         try {
-            const [arrendadoras, estados] = await Promise.all([
+            const [arrendadorasResp, estadosResp] = await Promise.all([
                 api.getArrendadoras(),
                 api.getEstadosInventario()
             ]);
+
+            // Extraer datos de las respuestas
+            const arrendadoras = arrendadorasResp && arrendadorasResp.success ? arrendadorasResp.data : arrendadorasResp || [];
+            const estados = estadosResp && estadosResp.success ? estadosResp.data : estadosResp || [];
 
             // Llenar filtro de arrendadoras
             const arrendadoraSelect = document.getElementById('filter-arrendadora');
@@ -693,7 +697,10 @@ class FlotaApp {
 
     async loadTareasFilters() {
         try {
-            const colaboradores = await api.getColaboradores();
+            const colaboradoresResp = await api.getColaboradores();
+            
+            // Extraer datos de la respuesta
+            const colaboradores = colaboradoresResp && colaboradoresResp.success ? colaboradoresResp.data : colaboradoresResp || [];
 
             // Llenar filtro de responsables
             const responsableSelect = document.getElementById('filter-tarea-responsable');
@@ -1462,7 +1469,8 @@ class FlotaApp {
     async loadMarcas() {
         this.setLoading('marcas', true);
         try {
-            const marcas = await api.getMarcas();
+            const marcasResp = await api.getMarcas();
+            const marcas = marcasResp && marcasResp.success ? marcasResp.data : marcasResp || [];
             this.renderMarcasTable(marcas);
         } catch (error) {
             console.error('Error loading marcas:', error);
@@ -1520,7 +1528,8 @@ class FlotaApp {
         const searchTerm = document.getElementById('search-marcas')?.value?.toLowerCase() || '';
 
         try {
-            const marcas = await api.getMarcas();
+            const marcasResp = await api.getMarcas();
+            const marcas = marcasResp && marcasResp.success ? marcasResp.data : marcasResp || [];
             const filtered = marcas.filter(m => m.nombre.toLowerCase().includes(searchTerm));
             this.renderMarcasTable(filtered);
         } catch (error) {
@@ -1555,7 +1564,8 @@ class FlotaApp {
 
     async loadModelosFilters() {
         try {
-            const marcas = await api.getMarcas();
+            const marcasResp = await api.getMarcas();
+            const marcas = marcasResp && marcasResp.success ? marcasResp.data : marcasResp || [];
             const marcaSelect = document.getElementById('filter-marca-modelo');
             if (marcaSelect) {
                 const currentValue = marcaSelect.value;
