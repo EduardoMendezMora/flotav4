@@ -673,13 +673,17 @@
         function activateEditMode(section) {
             editMode[section] = true;
             
-            // Ocultar elementos de visualización y mostrar inputs
-            const inputs = document.querySelectorAll(`#${section}-actions`).length > 0 ? 
-                document.querySelectorAll(`#${section} input, #${section} select, #${section} textarea`) : 
-                document.querySelectorAll(`[id^="edit-vehicle-"]`);
+            // Buscar todos los inputs de edición en la sección específica
+            const sectionElement = document.querySelector(`[onclick*="${section}"]`)?.closest('.card');
+            if (!sectionElement) {
+                console.error('No se encontró la sección:', section);
+                return;
+            }
             
+            // Mostrar todos los inputs de edición en esta sección
+            const inputs = sectionElement.querySelectorAll('input, select, textarea');
             inputs.forEach(input => {
-                if (input.id.includes(section.replace('-info', '')) || input.id.includes('edit-vehicle-')) {
+                if (input.id && input.id.startsWith('edit-')) {
                     input.classList.remove('d-none');
                     // Cargar valor actual en el input
                     const displayElement = input.id.replace('edit-', '');
@@ -786,8 +790,8 @@
                 }
             });
 
-            // Ocultar elementos de visualización
-            const displayElements = document.querySelectorAll(`#${section} .fw-medium, #${section} .fw-bold`);
+            // Ocultar elementos de visualización en esta sección
+            const displayElements = sectionElement.querySelectorAll('.fw-medium, .fw-bold');
             displayElements.forEach(el => {
                 if (!el.id.includes('edit-')) {
                     el.classList.add('d-none');
@@ -813,14 +817,23 @@
         function cancelEdit(section) {
             editMode[section] = false;
             
-            // Mostrar elementos de visualización y ocultar inputs
-            const inputs = document.querySelectorAll(`#${section} input, #${section} select, #${section} textarea`);
+            // Buscar la sección específica
+            const sectionElement = document.querySelector(`[onclick*="${section}"]`)?.closest('.card');
+            if (!sectionElement) {
+                console.error('No se encontró la sección:', section);
+                return;
+            }
+            
+            // Ocultar todos los inputs de edición en esta sección
+            const inputs = sectionElement.querySelectorAll('input, select, textarea');
             inputs.forEach(input => {
-                input.classList.add('d-none');
+                if (input.id && input.id.startsWith('edit-')) {
+                    input.classList.add('d-none');
+                }
             });
 
-            // Mostrar elementos de visualización
-            const displayElements = document.querySelectorAll(`#${section} .fw-medium, #${section} .fw-bold`);
+            // Mostrar elementos de visualización en esta sección
+            const displayElements = sectionElement.querySelectorAll('.fw-medium, .fw-bold');
             displayElements.forEach(el => {
                 if (!el.id.includes('edit-')) {
                     el.classList.remove('d-none');

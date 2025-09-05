@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Edición Vehículo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Test de Edición de Vehículo</h2>
+        
+        <!-- Información Básica del Vehículo -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0"><i class="fas fa-car me-2"></i>Información Básica</h6>
+                    <button class="btn btn-sm btn-outline-light" onclick="toggleEditMode('vehicle-info')" id="edit-vehicle-info-btn">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label text-muted small">Placa</label>
+                            <div id="vehicle-placa" class="fw-bold text-primary fs-5">ABC123</div>
+                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-placa" placeholder="Placa del vehículo">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label text-muted small">VIN</label>
+                            <div id="vehicle-vin" class="fw-medium">12345678901234567</div>
+                            <input type="text" class="form-control form-control-sm d-none" id="edit-vehicle-vin" placeholder="Número VIN" maxlength="17">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label text-muted small">Marca</label>
+                            <div id="vehicle-brand" class="fw-medium">Toyota</div>
+                            <select class="form-control form-control-sm d-none" id="edit-vehicle-marca">
+                                <option value="">Seleccionar marca</option>
+                                <option value="1">Toyota</option>
+                                <option value="2">Honda</option>
+                            </select>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label text-muted small">Modelo</label>
+                            <div id="vehicle-model" class="fw-medium">Corolla</div>
+                            <select class="form-control form-control-sm d-none" id="edit-vehicle-modelo">
+                                <option value="">Seleccionar modelo</option>
+                                <option value="1">Corolla</option>
+                                <option value="2">Camry</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Botones de acción para edición -->
+                    <div class="d-none" id="vehicle-info-actions">
+                        <div class="d-flex gap-2 justify-content-end">
+                            <button class="btn btn-sm btn-success" onclick="saveVehicleInfo()">
+                                <i class="fas fa-save"></i> Guardar
+                            </button>
+                            <button class="btn btn-sm btn-secondary" onclick="cancelEdit('vehicle-info')">
+                                <i class="fas fa-times"></i> Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado de edición
+        const editMode = {
+            'vehicle-info': false
+        };
+
+        // Alternar modo de edición
+        function toggleEditMode(section) {
+            const isEditing = editMode[section];
+            
+            if (isEditing) {
+                // Cancelar edición
+                cancelEdit(section);
+            } else {
+                // Activar edición
+                activateEditMode(section);
+            }
+        }
+
+        // Activar modo de edición
+        function activateEditMode(section) {
+            console.log('Activando edición para:', section);
+            editMode[section] = true;
+            
+            // Buscar todos los inputs de edición en la sección específica
+            const sectionElement = document.querySelector(`[onclick*="${section}"]`)?.closest('.card');
+            if (!sectionElement) {
+                console.error('No se encontró la sección:', section);
+                return;
+            }
+            
+            console.log('Sección encontrada:', sectionElement);
+            
+            // Mostrar todos los inputs de edición en esta sección
+            const inputs = sectionElement.querySelectorAll('input, select, textarea');
+            console.log('Inputs encontrados:', inputs.length);
+            
+            inputs.forEach(input => {
+                if (input.id && input.id.startsWith('edit-')) {
+                    console.log('Mostrando input:', input.id);
+                    input.classList.remove('d-none');
+                    
+                    // Cargar valor actual en el input
+                    const displayElement = input.id.replace('edit-', '');
+                    const displayEl = document.getElementById(displayElement);
+                    if (displayEl && input.type !== 'file') {
+                        let value = displayEl.textContent.trim();
+                        if (value === '-' || value === 'N/A' || value === 'Sin especificar') {
+                            value = '';
+                        }
+                        input.value = value;
+                        console.log('Valor cargado en', input.id, ':', value);
+                    }
+                }
+            });
+
+            // Ocultar elementos de visualización en esta sección
+            const displayElements = sectionElement.querySelectorAll('.fw-medium, .fw-bold');
+            displayElements.forEach(el => {
+                if (!el.id.includes('edit-')) {
+                    el.classList.add('d-none');
+                }
+            });
+
+            // Mostrar botones de acción
+            const actionsDiv = document.getElementById(`${section}-actions`);
+            if (actionsDiv) {
+                actionsDiv.classList.remove('d-none');
+            }
+
+            // Cambiar botón de editar
+            const editBtn = document.getElementById(`edit-${section}-btn`);
+            if (editBtn) {
+                editBtn.innerHTML = '<i class="fas fa-times"></i> Cancelar';
+                editBtn.classList.remove('btn-outline-light', 'btn-outline-dark');
+                editBtn.classList.add('btn-outline-danger');
+            }
+        }
+
+        // Cancelar edición
+        function cancelEdit(section) {
+            console.log('Cancelando edición para:', section);
+            editMode[section] = false;
+            
+            // Buscar la sección específica
+            const sectionElement = document.querySelector(`[onclick*="${section}"]`)?.closest('.card');
+            if (!sectionElement) {
+                console.error('No se encontró la sección:', section);
+                return;
+            }
+            
+            // Ocultar todos los inputs de edición en esta sección
+            const inputs = sectionElement.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                if (input.id && input.id.startsWith('edit-')) {
+                    input.classList.add('d-none');
+                }
+            });
+
+            // Mostrar elementos de visualización en esta sección
+            const displayElements = sectionElement.querySelectorAll('.fw-medium, .fw-bold');
+            displayElements.forEach(el => {
+                if (!el.id.includes('edit-')) {
+                    el.classList.remove('d-none');
+                }
+            });
+
+            // Ocultar botones de acción
+            const actionsDiv = document.getElementById(`${section}-actions`);
+            if (actionsDiv) {
+                actionsDiv.classList.add('d-none');
+            }
+
+            // Restaurar botón de editar
+            const editBtn = document.getElementById(`edit-${section}-btn`);
+            if (editBtn) {
+                editBtn.innerHTML = '<i class="fas fa-edit"></i> Editar';
+                editBtn.classList.remove('btn-outline-danger');
+                editBtn.classList.add('btn-outline-light');
+            }
+        }
+
+        // Guardar información del vehículo
+        function saveVehicleInfo() {
+            console.log('Guardando información del vehículo...');
+            
+            const placa = document.getElementById('edit-vehicle-placa').value;
+            const vin = document.getElementById('edit-vehicle-vin').value;
+            const marca = document.getElementById('edit-vehicle-marca').value;
+            const modelo = document.getElementById('edit-vehicle-modelo').value;
+            
+            console.log('Datos a guardar:', { placa, vin, marca, modelo });
+            
+            // Simular guardado exitoso
+            alert('✅ Información guardada correctamente!');
+            
+            // Actualizar elementos de visualización
+            document.getElementById('vehicle-placa').textContent = placa;
+            document.getElementById('vehicle-vin').textContent = vin;
+            
+            // Cancelar edición
+            cancelEdit('vehicle-info');
+        }
+    </script>
+</body>
+</html>
